@@ -1,69 +1,92 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import Metronome from "@/components/Metronome";
+import { ARTICLES } from "@/content/articles";
+import { ROMAN, UNITS } from "@/lib/curriculum";
+import { midiName } from "@/lib/notes";
+import { avgMs, lastSevenDays, streakOf, useProgress } from "@/lib/progress";
 
 export default function Home() {
+  const p = useProgress();
+  const next = UNITS.find((u) => !p.units[u.id]?.passed);
+  const done = UNITS.filter((u) => p.units[u.id]?.passed).length;
+  const pct = (done / UNITS.length) * 100;
+  const streak = streakOf(p.days);
+  const week = lastSevenDays(p.days);
+
+  const slow = Object.entries(p.notes)
+    .filter(([, s]) => s.n >= 2)
+    .map(([midi, s]) => ({ midi: +midi, ms: avgMs(s) }))
+    .sort((a, b) => b.ms - a.ms)
+    .slice(0, 8);
+  const article = ARTICLES[0];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="wrap page" style={{ gap: 48 }}>
+      <section style={{ display: "flex", gap: 40, justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap" }}>
+        <div className="stack" style={{ gap: 22, flex: "1 1 380px" }}>
+          <div className="label">{next ? `Continue · Grade ${ROMAN[next.grade]}` : "Path complete"}</div>
+          <h1 className="display">{next ? next.title : "Every unit complete"}</h1>
+          <p className="muted" style={{ maxWidth: "46ch" }}>
+            {next ? next.blurb : "Keep your reading sharp with today's étude. More grades are on the way."}
           </p>
+          <div className="row" style={{ gap: 18, flexWrap: "nowrap" }}>
+            <div className="pbar" aria-hidden="true">
+              <i style={{ width: `${pct}%` }} />
+              <b style={{ left: `${pct}%` }} />
+            </div>
+            <span className="label num">{done} / {UNITS.length}</span>
+            <Link className="play" href={next ? `/practice/unit/${next.id}` : "/practice/etude"} aria-label={next ? `Continue with ${next.title}` : "Begin today's étude"}>▶</Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <Metronome className="metro" />
+      </section>
+
+      <hr className="rule" />
+
+      <section className="grid2">
+        <div className="panel">
+          <div className="label">Today&apos;s étude</div>
+          <strong style={{ fontSize: "1.5rem", fontWeight: 400 }}>{p.rounds ? "A mix, tuned to you" : "A first round"}</strong>
+          <p className="muted">Twenty notes, leaning towards the ones you find slow.</p>
+          <Link className="btn solid" href="/practice/etude"><span>Begin</span></Link>
         </div>
-      </main>
-    </div>
+        <div className="panel">
+          <div className="label">Streak</div>
+          <strong style={{ fontSize: "1.5rem", fontWeight: 400 }}>{streak} {streak === 1 ? "day" : "days"}</strong>
+          <div className="dots" aria-label="Last seven days">
+            {week.map((on, i) => <span key={i} className={`dot${on ? " on" : ""}`} />)}
+          </div>
+          <p className="muted" style={{ fontSize: "0.9rem" }}>Last seven days, today on the right.</p>
+        </div>
+      </section>
+
+      <section className="stack" style={{ gap: 18 }}>
+        <div className="label">Slowest notes · denser hatching, slower</div>
+        {slow.length ? (
+          <div className="heat">
+            {slow.map((s, i) => (
+              <div key={s.midi} className="cell" data-l={Math.min(4, 4 - Math.floor((i / slow.length) * 4))}>
+                <span>{midiName(s.midi)}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="muted">Play a few rounds and your slowest notes will appear here.</p>
+        )}
+      </section>
+
+      <hr className="rule" />
+
+      <section className="stack" style={{ gap: 10 }}>
+        <div className="label">From the learning shelf</div>
+        <Link href={`/learn/${article.slug}`} className="card-link" style={{ borderTop: 0, padding: 0 }}>
+          <h3 style={{ fontSize: "1.5rem" }}>{article.title}</h3>
+          <p className="muted">{article.blurb}</p>
+        </Link>
+        <Link className="tbtn" href="/learn" style={{ alignSelf: "flex-start" }}>All guides</Link>
+      </section>
+    </main>
   );
 }

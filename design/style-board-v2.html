@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>peanits · style board v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<script>
+  // set theme before first paint
+  (function(){var d=document.documentElement;
+    d.dataset.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+    d.dataset.paper="warm";})();
+</script>
+<style>
+:root{--paper:#eaddcb;--ink:#2b241f;--ink2:#5b5046}
+:root[data-paper="neutral"]{--paper:#f3f3f1;--ink:#161616;--ink2:#4f4f4f}
+:root[data-theme="dark"]{--paper:#211c18;--ink:#eadfcc;--ink2:#b3a791}
+:root[data-theme="dark"][data-paper="neutral"]{--paper:#181818;--ink:#ececec;--ink2:#a9a9a9}
+
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Serif 4",Georgia,serif;transition:background .25s,color .25s;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.08;background-image:var(--grain);z-index:0}
+main,header{position:relative;z-index:1}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 28px;flex-wrap:wrap}
+.top h1{margin:0;font:400 13px/1 "Source Serif 4",serif;letter-spacing:.2em;text-transform:uppercase}
+.top p{margin:6px 0 0;font-size:14px;color:var(--ink2);max-width:60ch}
+.top .ctl{display:flex;gap:14px}
+
+.pair-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,540px),1fr));gap:56px;padding:12px 28px 80px}
+.kit{display:flex;flex-direction:column;gap:34px;font-size:var(--fs)}
+.kit[data-pair="A"]{--f:"Source Serif 4",Georgia,serif;--fs:16px}
+.kit[data-pair="B"]{--f:"EB Garamond",Georgia,serif;--fs:17.5px}
+.kit{font-family:var(--f)}
+.kit *{font-family:inherit}
+
+.pairname,.label{font-size:.7em;letter-spacing:.2em;text-transform:uppercase;color:var(--ink2)}
+.center{text-align:center}
+.credit{text-align:right;font-size:.8em;color:var(--ink2);font-style:italic}
+.wordmark{font-size:2.6em;font-weight:400;letter-spacing:.01em;margin:0;text-align:center;line-height:1}
+.title{font-size:1.9em;font-weight:400;margin:4px 0 0;line-height:1.15}
+.body{margin:0;color:var(--ink2);line-height:1.65;max-width:46ch}
+.foot{text-align:center;font-size:.72em;color:var(--ink2);line-height:1.5}
+.sec{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.cap{font-size:.78em;color:var(--ink2);text-align:center;margin-top:8px}
+
+/* hand-drawn outline layer (injected by JS) */
+.sk{position:relative;isolation:isolate}
+.skin{position:absolute;left:-3px;top:-3px;overflow:visible;pointer-events:none;z-index:-1}
+.skin path{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
+.skin .p1{stroke-width:1.5;fill:var(--fill,none)}
+.skin .p2{stroke-width:.8;opacity:.5}
+[data-line]{position:relative;display:block}
+[data-line] svg{position:absolute;left:0;top:0;overflow:visible}
+[data-line] path{fill:none;stroke:var(--ink);stroke-linecap:round}
+[data-line] .thin{stroke-width:1.4}
+[data-line] .thick{stroke-width:3.4}
+[data-line] .dot{fill:var(--ink);stroke-width:1}
+
+/* buttons */
+.btn{background:none;border:0;color:var(--ink);font-size:.95em;letter-spacing:.03em;padding:11px 24px;cursor:pointer;transition:color .15s}
+.btn:hover .p2,.btn.is-hover .p2{opacity:1;stroke-width:1.2}
+.btn:active,.btn.is-pressed{--fill:url(#hatch)}
+.btn.is-active,.play{--fill:var(--ink);color:var(--paper)}
+.btn.is-active:active{--fill:url(#hatch);color:var(--ink)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn[disabled] .skin path{stroke-dasharray:4 4}
+.btn:focus-visible,.toggle input:focus-visible+.tr,.nav button:focus-visible,.fig:focus-visible{outline:2px solid var(--ink);outline-offset:5px;border-radius:999px}
+.bcol{display:flex;flex-direction:column;align-items:center}
+
+/* toggle */
+.toggle{display:inline-flex;align-items:center;gap:12px;cursor:pointer}
+.toggle input{position:absolute;opacity:0}
+.tr{display:inline-block;width:58px;height:30px}
+.kn{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--paper);transition:left .2s}
+.toggle input:checked+.tr .kn{left:31px;--fill:var(--ink)}
+
+/* slider + dial */
+.slider{position:relative;height:26px;width:100%}
+.slider .rail{position:absolute;left:0;right:0;top:50%;height:8px;transform:translateY(-50%)}
+.slider input{position:absolute;inset:0;width:100%;height:100%;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer}
+.slider input::-webkit-slider-runnable-track{background:transparent;height:26px}
+.slider input::-moz-range-track{background:transparent}
+.slider input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:2px;background:var(--ink);-webkit-mask:var(--blob) center/contain no-repeat;mask:var(--blob) center/contain no-repeat;border:0}
+.slider input::-moz-range-thumb{width:22px;height:22px;background:var(--ink);mask:var(--blob) center/contain no-repeat;border:0;border-radius:0}
+.slider input:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.dialwrap{display:flex;gap:30px;align-items:center;flex-wrap:wrap}
+.dial{width:150px;height:150px;flex:none}
+.dial svg{width:100%;height:100%;overflow:visible}
+.dial path,.dial line{fill:none;stroke:var(--ink);stroke-linecap:round}
+.lcd{padding:10px 26px;text-align:center;min-width:150px}
+.lcd small{display:block;font-size:.62em;letter-spacing:.2em;text-transform:uppercase;color:var(--ink2)}
+.lcd b{font-weight:400;font-size:1.7em;font-variant-numeric:lining-nums tabular-nums;font-feature-settings:"lnum","tnum"}
+
+/* staff figures */
+.sys{width:100%;height:auto;display:block;overflow:visible}
+.sys .st,.fig .st{fill:none;stroke:var(--ink);stroke-width:1.3;stroke-linecap:round}
+.sys .heavy{stroke-width:3.2}
+.sys .scene,.fig .scene{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sys .soft,.fig .soft{stroke-width:1;opacity:.55}
+.sys text,.fig text{fill:var(--ink)}
+.sys .lab{font-size:12px;text-anchor:middle;fill:var(--ink2)}
+.sys .lock{font-style:italic;font-size:12px;text-anchor:middle;fill:var(--ink2)}
+.sys .ldash{stroke-dasharray:3 5;opacity:.55}
+.figs{display:flex;gap:28px;flex-wrap:wrap}
+.fig{flex:1;min-width:230px;cursor:pointer}
+.fig svg{width:100%;height:auto;display:block;overflow:visible}
+.fig .nt{fill:none;stroke:var(--ink);stroke-width:2.2}
+.fig .ghost{stroke-dasharray:3 3;stroke-width:1.6;opacity:.7}
+.fig .mk{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round}
+.fig .clef{font-size:62px}
+.draw{stroke-dasharray:1;stroke-dashoffset:0}
+.go .draw{animation:draw .65s ease-out both}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.go .draw{animation:none}}
+
+/* dashboard */
+.dash{display:flex;flex-direction:column;gap:26px}
+.dash h3{font-size:1.55em;font-weight:400;margin:4px 0 0;line-height:1.2}
+.prog{display:flex;align-items:center;gap:18px}
+.prog [data-line]{flex:1;height:22px}
+.play{width:56px;height:56px;border:0;border-radius:50%;font-size:1.05em;cursor:pointer;background:none;padding:0 0 0 3px;flex:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.mini{padding:20px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.mini strong{font-size:1.45em;font-weight:400}
+.dots{display:flex;gap:10px}
+.dot{width:16px;height:16px;display:block;background:var(--paper);border-radius:50%}
+.dot.on{--fill:var(--ink)}
+.heat{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.cell{aspect-ratio:1;display:grid;place-items:center;font-size:.85em}
+.cell span{background:var(--paper);padding:0 4px;line-height:1.2}
+.legend{display:flex;justify-content:space-between;font-size:.75em;color:var(--ink2);margin-top:12px}
+.nav{display:flex;justify-content:space-between;gap:4px;padding-top:4px}
+.nav button{position:relative;background:none;border:0;color:var(--ink2);font-size:.92em;letter-spacing:.04em;padding:8px 10px 14px;cursor:pointer}
+.nav button.on{color:var(--ink)}
+.nav .ul{display:none;position:absolute;left:6px;right:6px;bottom:2px;height:8px}
+.nav .on .ul{display:block}
+.swatches{display:flex;gap:16px;flex-wrap:wrap}
+.sw{width:64px;text-align:center;font-size:.72em;color:var(--ink2)}
+.sw i{display:block;height:46px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--ink);stroke-width:1"/></pattern>
+    <pattern id="h1" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" style="stroke:var(--ink);stroke-width:.9"/></pattern>
+    <pattern id="h2" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="9" style="stroke:var(--ink);stroke-width:.9"/></pattern>
+    <pattern id="h3" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--ink);stroke-width:1"/></pattern>
+    <pattern id="h4" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--ink);stroke-width:1.1"/></pattern>
+  </defs>
+</svg>
+
+<header class="top">
+  <div>
+    <h1>peanits · style board v2</h1>
+    <p>One ink, one paper, drawn by hand. Two type pairings. Every outline is generated, slightly different each time. Hover, press, and click the marks.</p>
+  </div>
+  <div class="ctl">
+    <button class="btn sk" data-n="3" id="themeBtn">Light / Dark</button>
+    <button class="btn sk" data-n="3" id="paperBtn">Paper: Warm</button>
+  </div>
+</header>
+
+<main class="pair-grid" id="grid"></main>
+
+<template id="kit">
+  <section class="kit">
+    <div class="pairname center"></div>
+
+    <div class="sec">
+      <h2 class="wordmark">peanits</h2>
+      <div class="credit">free sight-reading for pianists</div>
+      <i data-line></i>
+    </div>
+
+    <div class="sec">
+      <div class="label">Grade II · Unit 3</div>
+      <h3 class="title">Reading ahead of your hands</h3>
+      <p class="body">Sight-reading is the art of playing music you have never seen, one beat ahead of where your fingers are.</p>
+    </div>
+
+    <div class="sec">
+      <div class="label">The Path · a score you fill in</div>
+      <svg class="sys" viewBox="0 0 560 140" role="img" aria-label="Grade II as a system of three measures"></svg>
+    </div>
+
+    <div class="sec">
+      <div class="label">Buttons · five states</div>
+      <div class="row">
+        <div class="bcol"><button class="btn sk" data-n="3">Begin</button><div class="cap">default</div></div>
+        <div class="bcol"><button class="btn sk is-hover" data-n="3">Begin</button><div class="cap">hover</div></div>
+        <div class="bcol"><button class="btn sk is-pressed" data-n="3">Begin</button><div class="cap">pressed</div></div>
+        <div class="bcol"><button class="btn sk is-active" data-n="3">Begin</button><div class="cap">active</div></div>
+        <div class="bcol"><button class="btn sk" data-n="3" disabled>Begin</button><div class="cap">disabled</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Controls</div>
+      <div class="row">
+        <label class="toggle"><input type="checkbox" checked><span class="tr sk" data-n="3"><span class="kn sk" data-n="2"></span></span>Microphone</label>
+        <label class="toggle"><input type="checkbox"><span class="tr sk" data-n="3"><span class="kn sk" data-n="2"></span></span>MIDI keyboard</label>
+        <label class="toggle"><input type="checkbox" checked><span class="tr sk" data-n="3"><span class="kn sk" data-n="2"></span></span>Metronome</label>
+      </div>
+      <div class="dialwrap">
+        <div class="dial" aria-hidden="true"><svg viewBox="0 0 150 150"></svg></div>
+        <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:18px">
+          <div class="lcd sk" data-n="5"><small>Tempo</small><b class="bpm">♩ = 72</b></div>
+          <div class="slider"><i class="rail" data-line></i><input class="tempo" type="range" min="40" max="208" value="72" aria-label="Tempo"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Feedback · the pen marks the answer (click to redraw)</div>
+      <div class="figs">
+        <div><div class="fig ok go" tabindex="0" role="button" aria-label="Correct answer, replay"></div><div class="cap">✓ C4 · 0.84 s</div></div>
+        <div><div class="fig bad go" tabindex="0" role="button" aria-label="Wrong answer, replay"></div><div class="cap">✕ played D4 · target C4</div></div>
+      </div>
+    </div>
+
+    <div class="sec dash">
+      <div class="label">Home dashboard</div>
+      <div>
+        <div class="label">Continue</div>
+        <h3>Bass clef · ledger lines</h3>
+      </div>
+      <div class="prog">
+        <i data-line data-prog=".62"></i>
+        <span class="label">62%</span>
+        <button class="play sk" data-n="2" aria-label="Continue">▶</button>
+      </div>
+      <i data-line></i>
+      <div class="two">
+        <div class="mini sk" data-n="6"><div class="label">Today's étude</div><strong>5 min</strong><button class="btn sk is-active" data-n="3">Begin</button></div>
+        <div class="mini sk" data-n="6"><div class="label">Streak</div><strong>12 days</strong>
+          <div class="dots"><span class="dot sk on" data-n="2"></span><span class="dot sk on" data-n="2"></span><span class="dot sk on" data-n="2"></span><span class="dot sk on" data-n="2"></span><span class="dot sk" data-n="2"></span><span class="dot sk" data-n="2"></span><span class="dot sk" data-n="2"></span></div></div>
+      </div>
+      <div>
+        <div class="label" style="margin-bottom:14px">Slowest notes · denser hatching, slower</div>
+        <div class="heat"></div>
+        <div class="legend"><span>quicker</span><span>slower</span></div>
+      </div>
+      <i data-line></i>
+      <nav class="nav" aria-label="Main">
+        <button class="on">Home<i class="ul" data-line></i></button><button>Practice<i class="ul" data-line></i></button><button>Path<i class="ul" data-line></i></button><button>Library<i class="ul" data-line></i></button><button>Learn<i class="ul" data-line></i></button>
+      </nav>
+    </div>
+
+    <div class="sec">
+      <div class="label">Palette</div>
+      <div class="swatches">
+        <div class="sw"><i class="sk" data-n="6" style="--fill:var(--paper)"></i>Paper</div>
+        <div class="sw"><i class="sk" data-n="6" style="--fill:var(--ink)"></i>Ink</div>
+        <div class="sw"><i class="sk" data-n="6" style="--fill:var(--ink2)"></i>Ink 2</div>
+        <div class="sw"><i class="sk" data-n="6" style="--fill:url(#h2)"></i>Hatch</div>
+      </div>
+    </div>
+
+    <div class="foot">Free, forever. Made by Yirschen.<br>Scores from the public domain.</div>
+  </section>
+</template>
+
+<script>
+/* ---------- tiny hand-drawing toolkit ---------- */
+let uid = 1;
+const rng = a => () => { a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+const f1 = n => n.toFixed(1);
+function cr(p){ // Catmull-Rom through points -> cubic bezier path
+  let d = `M${f1(p[0][0])},${f1(p[0][1])}`;
+  for (let i=0;i<p.length-1;i++){
+    const p0=p[i-1]||p[i], p1=p[i], p2=p[i+1], p3=p[i+2]||p2;
+    d += `C${f1(p1[0]+(p2[0]-p0[0])/6)},${f1(p1[1]+(p2[1]-p0[1])/6)} ${f1(p2[0]-(p3[0]-p1[0])/6)},${f1(p2[1]-(p3[1]-p1[1])/6)} ${f1(p2[0])},${f1(p2[1])}`;
+  }
+  return d;
+}
+function hl(x1,y1,x2,y2,seed,j=.8){ // wobbly straight line
+  const r=rng(seed), L=Math.hypot(x2-x1,y2-y1)||1, n=Math.max(2,Math.round(L/28));
+  const nx=-(y2-y1)/L, ny=(x2-x1)/L, p=[];
+  for(let i=0;i<=n;i++){const t=i/n,o=(r()-.5)*2*j;p.push([x1+(x2-x1)*t+nx*o,y1+(y2-y1)*t+ny*o]);}
+  return cr(p);
+}
+function blob(w,h,n,seed,j=1.2){ // wobbly squircle/ellipse, ends overshoot like a pen
+  const r=rng(seed),a=w/2,b=h/2,N=Math.max(14,Math.round((w+h)/9)),t0=r()*6.283,ph1=r()*6.283,ph2=r()*6.283,e=2/n,p=[];
+  const total=6.283+.35;
+  for(let i=0;i<=N;i++){
+    const t=t0+total*i/N,c=Math.cos(t),s=Math.sin(t);
+    const wob=j*(.6*Math.sin(3*t+ph1)+.4*Math.sin(5*t+ph2))+(r()-.5)*.4;
+    p.push([a+a*Math.sign(c)*Math.abs(c)**e+wob*c, b+b*Math.sign(s)*Math.abs(s)**e+wob*s]);
+  }
+  return cr(p);
+}
+const NS="http://www.w3.org/2000/svg";
+function skin(el){
+  const w=el.offsetWidth,h=el.offsetHeight; if(!w||!h) return;
+  let svg=el.querySelector(":scope>svg.skin");
+  if(!svg){
+    svg=document.createElementNS(NS,"svg"); svg.setAttribute("class","skin");
+    svg.innerHTML='<path class="p1"/><path class="p2"/>'; el.prepend(svg);
+    el.dataset.seed ||= uid++ * 13;
+  }
+  const pad=3, n=+el.dataset.n||4, s=+el.dataset.seed;
+  svg.setAttribute("width",w+2*pad); svg.setAttribute("height",h+2*pad);
+  svg.setAttribute("viewBox",`${-pad} ${-pad} ${w+2*pad} ${h+2*pad}`);
+  svg.children[0].setAttribute("d",blob(w,h,n,s,1.3));
+  svg.children[1].setAttribute("d",blob(w,h,n,s+7,1.8));
+}
+function drawLine(el){
+  const w=el.clientWidth,h=el.clientHeight||8; if(!w) return;
+  let svg=el.querySelector(":scope>svg");
+  if(!svg){svg=document.createElementNS(NS,"svg"); el.prepend(svg); el.dataset.seed ||= uid++*17;}
+  svg.setAttribute("width",w); svg.setAttribute("height",h); svg.setAttribute("viewBox",`0 0 ${w} ${h}`);
+  const s=+el.dataset.seed, y=h/2, prog=parseFloat(el.dataset.prog);
+  let html=`<path class="thin" d="${hl(2,y,w-2,y,s,.9)}"/>`;
+  if(prog){ html+=`<path class="thick" d="${hl(2,y,w*prog,y,s+3,.7)}"/><path class="dot" d="${blob(18,18,2,s+5,.8)}" transform="translate(${w*prog-9},${y-9})"/>`; }
+  svg.innerHTML=html;
+}
+const ro = new ResizeObserver(es => es.forEach(e => e.target.matches(".sk")?skin(e.target):drawLine(e.target)));
+
+/* ---------- reusable masks ---------- */
+(function(){
+  const blobSvg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><path d="${blob(20,19,2,5,.9)}" transform="translate(1,1.5)" fill="black"/></svg>`;
+  document.documentElement.style.setProperty("--blob",`url("data:image/svg+xml,${encodeURIComponent(blobSvg)}")`);
+  const grain=`<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .9 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>`;
+  document.documentElement.style.setProperty("--grain",`url("data:image/svg+xml,${encodeURIComponent(grain)}")`);
+})();
+
+/* ---------- figures ---------- */
+function noteHead(cx,cy,seed,cls){
+  return `<g transform="translate(${cx-9},${cy-6.5}) rotate(-18 9 6.5)"><path class="${cls}" d="${blob(18,13,2,seed,.5)}"/></g>`;
+}
+function staffFig(kind){
+  const xs=44,xe=292,ys=[30,40,50,60,70];
+  let s=`<svg viewBox="0 0 300 120" aria-hidden="true">`;
+  ys.forEach(y=>s+=`<path class="st" d="${hl(xs,y,xe,y,uid++,.7)}"/>`);
+  s+=`<path class="st" d="${hl(xs,30,xs,70,uid++,.5)}"/>`;
+  s+=`<text class="clef" x="50" y="76" font-family="'Noto Music','Apple Symbols','Bravura Text',serif">𝄞</text>`;
+  s+=`<path class="st" d="${hl(184,90,216,90,uid++,.5)}"/>`;
+  s+=noteHead(200,90,uid++,"nt");
+  if(kind==="ok"){
+    s+=`<path class="mk draw" pathLength="1" d="${blob(46,38,2,uid++,2.2)}" transform="translate(177,71)"/>`;
+    s+=`<path class="mk draw" pathLength="1" d="${hl(238,56,246,66,uid++,.4)} ${hl(246,66,262,42,uid++,.4)}" />`;
+  } else {
+    s+=`<path class="mk draw" pathLength="1" d="${hl(182,78,218,102,uid++,.9)}"/>`;
+    s+=`<path class="mk draw" pathLength="1" d="${hl(182,102,218,78,uid++,.9)}"/>`;
+    s+=noteHead(250,80,uid++,"nt ghost");
+  }
+  return s+`</svg>`;
+}
+function systemFig(){
+  const L=32,R=548,B=[L,L+172,L+344,R],ys=[40,50,60,70,80];
+  let s="";
+  ys.forEach(y=>s+=`<path class="st" d="${hl(L,y,R,y,uid++,.7)}"/>`);
+  B.forEach((x,i)=>{ s+=`<path class="st${i===B.length-1?" heavy":""}" d="${hl(x,40,x,80,uid++,.5)}"/>`; });
+  s+=`<path class="st" d="${hl(R-6,40,R-6,80,uid++,.5)}"/>`;
+  s+=`<path class="st" d="M24,40 C10,40 22,58 8,60 C22,62 10,80 24,80"/>`; // brace
+  // unit I: hills, sun, clouds
+  s+=`<path class="scene" d="M32,74 C60,56 96,56 122,72 S172,60 204,76"/>`;
+  s+=`<path class="scene soft" d="M32,86 C80,80 130,90 204,84"/>`;
+  s+=`<path class="scene" d="M152,40 a14,14 0 0 1 28,0"/><path class="scene" d="M158,40 a8,8 0 0 1 16,0"/>`;
+  s+=`<path class="scene" d="M60,32 c0,-7 9,-8 12,-3 c3,-6 13,-4 12,3 z"/>`;
+  // unit II: mountains
+  s+=`<path class="scene" d="${hl(204,80,240,52,uid++,.5)} ${hl(240,52,262,68,uid++,.5)} ${hl(262,68,296,40,uid++,.5)} ${hl(296,40,334,76,uid++,.5)} ${hl(334,76,350,64,uid++,.5)} ${hl(350,64,376,80,uid++,.5)}"/>`;
+  s+=`<path class="scene soft" d="${hl(204,88,376,88,uid++,.8)}"/>`;
+  s+=`<path class="scene" d="M300,30 c0,-6 8,-7 11,-2 c3,-5 11,-3 10,2 z"/>`;
+  // unit III: locked
+  s+=`<text class="lock" x="462" y="64">unlocks at 80%</text>`;
+  s+=`<text class="lab" x="118" y="112">Unit I ✓</text><text class="lab" x="290" y="112">Unit II ✓</text><text class="lab" x="462" y="112">Unit III</text>`;
+  return s;
+}
+function dialFig(svg){
+  const cx=75,cy=75;let h=`<path d="${blob(136,136,2,41,1.6)}" transform="translate(7,7)" style="stroke-width:1.6"/>`;
+  h+=`<path d="${blob(122,122,2,43,1.8)}" transform="translate(14,14)" style="stroke-width:.8;opacity:.5"/>`;
+  for(let i=0;i<=18;i++){
+    const a=(-135+i*15)*Math.PI/180-Math.PI/2,big=i%3===0,r1=big?50:54,r2=60;
+    h+=`<path d="${hl(cx+r1*Math.cos(a),cy+r1*Math.sin(a),cx+r2*Math.cos(a),cy+r2*Math.sin(a),uid++,.3)}" style="stroke-width:${big?1.6:1}"/>`;
+  }
+  h+=`<g class="needle"><path d="${hl(75,75,75,32,uid++,.6)}" style="stroke-width:2.4"/></g><path d="${blob(12,12,2,47,.5)}" transform="translate(69,69)" style="fill:var(--ink)"/>`;
+  svg.innerHTML=h;
+}
+
+/* ---------- build the two kits ---------- */
+const PAIRS={A:"A · Source Serif 4",B:"B · EB Garamond"};
+const NOTES=["C","D","E","F","G","A","B","C"], LEVEL=[0,1,3,0,2,0,4,2];
+const grid=document.getElementById("grid"), tpl=document.getElementById("kit");
+for(const key of Object.keys(PAIRS)){
+  const kit=tpl.content.firstElementChild.cloneNode(true);
+  kit.dataset.pair=key; kit.querySelector(".pairname").textContent=PAIRS[key];
+  kit.querySelector(".sys").innerHTML=systemFig();
+  kit.querySelector(".fig.ok").innerHTML=staffFig("ok");
+  kit.querySelector(".fig.bad").innerHTML=staffFig("bad");
+  dialFig(kit.querySelector(".dial svg"));
+
+  const heat=kit.querySelector(".heat");
+  NOTES.forEach((n,i)=>{
+    const c=document.createElement("div"); c.className="cell sk"; c.dataset.n="5";
+    c.style.setProperty("--fill",LEVEL[i]?`url(#h${LEVEL[i]})`:"none");
+    c.innerHTML=`<span>${n}</span>`; heat.appendChild(c);
+  });
+
+  const needle=kit.querySelector(".needle"),bpm=kit.querySelector(".bpm"),r=kit.querySelector(".tempo");
+  const setT=()=>{const v=+r.value;bpm.textContent="♩ = "+v;needle.setAttribute("transform",`rotate(${-135+(v-40)/(208-40)*270} 75 75)`);};
+  r.addEventListener("input",setT);setT();
+
+  kit.querySelectorAll(".fig").forEach(f=>{
+    const again=()=>{const paths=f.querySelectorAll(".draw");f.classList.remove("go");void f.offsetWidth;f.classList.add("go");};
+    f.addEventListener("click",again);
+    f.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();again();}});
+  });
+  kit.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{
+    kit.querySelectorAll(".nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+  }));
+  grid.appendChild(kit);
+}
+document.querySelectorAll(".sk,[data-line]").forEach(el=>ro.observe(el));
+
+/* ---------- theme ---------- */
+const root=document.documentElement;
+document.getElementById("themeBtn").addEventListener("click",()=>{root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";});
+const pb=document.getElementById("paperBtn");
+pb.addEventListener("click",()=>{
+  const neutral=root.dataset.paper!=="neutral";
+  root.dataset.paper=neutral?"neutral":"warm";
+  pb.firstChild.nodeValue="Paper: "+(neutral?"Neutral":"Warm");
+});
+</script>
+</body>
+</html>

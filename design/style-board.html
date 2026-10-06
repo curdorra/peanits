@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>peanits · style board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Jost:wght@300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --surface:#e6e6e6; --hi:#ffffff; --lo:#b8b8b8;
+  --text:#161616; --text2:#4f4f4f;
+  --paper:#ffffff; --ink:#111111;
+  --pri-bg:#111111; --pri-fg:#f5f5f5;
+  --raised: 8px 8px 16px var(--lo), -8px -8px 16px var(--hi);
+  --raised-sm: 4px 4px 9px var(--lo), -4px -4px 9px var(--hi);
+  --inset: inset 6px 6px 12px var(--lo), inset -6px -6px 12px var(--hi);
+  --inset-sm: inset 3px 3px 6px var(--lo), inset -3px -3px 6px var(--hi);
+}
+:root[data-theme="dark"]{
+  --surface:#1e1e1e; --hi:#2c2c2c; --lo:#0e0e0e;
+  --text:#f2f2f2; --text2:#a9a9a9;
+  --paper:#ededed; --ink:#111111;
+  --pri-bg:#f5f5f5; --pri-fg:#111111;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --surface:#1e1e1e; --hi:#2c2c2c; --lo:#0e0e0e;
+    --text:#f2f2f2; --text2:#a9a9a9;
+    --paper:#ededed; --ink:#111111;
+    --pri-bg:#f5f5f5; --pri-fg:#111111;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--text);font-family:Inter,system-ui,sans-serif;transition:background .25s,color .25s}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;flex-wrap:wrap}
+.top h1{margin:0;font:500 14px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.top p{margin:4px 0 0;font-size:13px;color:var(--text2)}
+.pair-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:32px;padding:8px 24px 64px}
+.kit{display:flex;flex-direction:column;gap:28px}
+.kit[data-pair="A"]{--serif:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif}
+.kit[data-pair="B"]{--serif:"Cormorant Garamond",Georgia,serif;--sans:"Jost",system-ui,sans-serif}
+.kit{font-family:var(--sans)}
+.pairname{font:500 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--text2)}
+.label{font:500 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text2)}
+.wordmark{font:500 44px/1 var(--serif);letter-spacing:-.01em;margin:0}
+.kit[data-pair="B"] .wordmark{font-size:52px;font-weight:500}
+h2.h{font:400 30px/1.15 var(--serif);margin:6px 0 0}
+.kit[data-pair="B"] h2.h{font-size:36px}
+.body{font:400 15px/1.6 var(--sans);color:var(--text2);max-width:46ch;margin:0}
+.kit[data-pair="B"] .body{font-size:16px;font-weight:300;color:var(--text)}
+.sec{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+
+/* buttons */
+.btn{font:500 14px var(--sans);letter-spacing:.04em;color:var(--text);background:var(--surface);border:0;border-radius:999px;padding:12px 22px;cursor:pointer;box-shadow:var(--raised-sm);transition:box-shadow .15s,transform .1s}
+.btn:hover,.btn.is-hover{box-shadow:6px 6px 13px var(--lo),-6px -6px 13px var(--hi)}
+.btn:active,.btn.is-pressed{box-shadow:var(--inset-sm);transform:scale(.985)}
+.btn.is-active{background:var(--pri-bg);color:var(--pri-fg);box-shadow:var(--raised-sm)}
+.btn.is-active:active{box-shadow:inset 3px 3px 6px rgba(0,0,0,.5)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn:focus-visible,.toggle input:focus-visible+span,input[type=range]:focus-visible{outline:2px solid var(--text);outline-offset:3px}
+.btn-cap{font:400 11px var(--sans);color:var(--text2);text-align:center;margin-top:6px}
+.bcol{display:flex;flex-direction:column;align-items:center}
+
+/* toggle */
+.toggle{display:inline-flex;align-items:center;gap:10px;font:400 14px var(--sans);cursor:pointer}
+.toggle input{position:absolute;opacity:0}
+.toggle span{width:54px;height:30px;border-radius:999px;background:var(--surface);box-shadow:var(--inset-sm);position:relative;transition:.2s}
+.toggle span::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--surface);box-shadow:var(--raised-sm);transition:.2s}
+.toggle input:checked+span{background:var(--pri-bg)}
+.toggle input:checked+span::after{left:27px;background:var(--pri-fg)}
+
+/* slider */
+.slider{display:flex;align-items:center;gap:14px;width:100%}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:10px;border-radius:999px;background:var(--surface);box-shadow:var(--inset-sm);outline-offset:6px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--surface);box-shadow:var(--raised-sm);cursor:grab;border:0}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--surface);box-shadow:var(--raised-sm);border:0}
+
+/* dial + lcd */
+.dialwrap{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.dial{position:relative;width:140px;height:140px;border-radius:50%;box-shadow:var(--raised)}
+.dial i{position:absolute;inset:16px;border-radius:50%;box-shadow:var(--inset);display:block}
+.dial b{position:absolute;left:50%;top:10px;width:4px;height:20px;margin-left:-2px;border-radius:2px;background:var(--text);transform-origin:50% 60px;transition:transform .08s}
+.lcd{font:500 28px var(--sans);font-variant-numeric:tabular-nums;letter-spacing:.04em;padding:10px 20px;border-radius:14px;background:var(--surface);box-shadow:var(--inset);min-width:140px;text-align:center}
+.lcd small{font-size:12px;color:var(--text2);letter-spacing:.14em;display:block;text-transform:uppercase;margin-bottom:2px}
+
+/* paper staff card */
+.paper{background:var(--paper);color:var(--ink);border-radius:24px;padding:12px;box-shadow:var(--raised)}
+.paper svg{display:block;width:100%;height:auto}
+.fb{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.ring{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;text-align:center;background:var(--surface);font:500 13px/1.25 var(--sans);cursor:pointer;user-select:none}
+.ring em{display:block;font:italic 400 12px var(--serif);color:var(--text2);font-style:italic}
+.ring.ok{box-shadow:var(--raised),inset 0 0 0 5px var(--text)}
+.ring.bad{box-shadow:var(--raised),inset 0 0 0 4px var(--surface),inset 0 0 0 5px var(--text2);border:2px dashed var(--text2)}
+.ring.shake{animation:shake .35s}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@media (prefers-reduced-motion:reduce){.ring.shake{animation:none}}
+
+/* dashboard mock */
+.card{border-radius:32px;background:var(--surface);box-shadow:var(--raised);padding:24px;display:flex;flex-direction:column;gap:18px}
+.card h3{font:400 24px/1.2 var(--serif);margin:0}
+.kit[data-pair="B"] .card h3{font-size:30px}
+.progress{display:flex;align-items:center;gap:14px}
+.track{flex:1;height:10px;border-radius:999px;box-shadow:var(--inset-sm)}
+.track div{height:100%;width:62%;border-radius:999px;background:var(--text)}
+.play{width:60px;height:60px;border-radius:50%;border:0;background:var(--pri-bg);color:var(--pri-fg);font-size:20px;cursor:pointer;box-shadow:var(--raised-sm)}
+.play:active{box-shadow:inset 3px 3px 6px rgba(0,0,0,.5)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mini{border-radius:24px;box-shadow:var(--raised-sm);padding:18px;display:flex;flex-direction:column;gap:10px}
+.mini strong{font:400 22px var(--serif)}
+.dots{display:flex;gap:8px}
+.dots span{width:16px;height:16px;border-radius:50%;box-shadow:var(--inset-sm)}
+.dots span.on{background:var(--text);box-shadow:var(--raised-sm)}
+.heat{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+.heat div{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font:500 11px var(--sans);box-shadow:var(--inset-sm)}
+.legend{display:flex;justify-content:space-between;font:400 11px var(--sans);color:var(--text2)}
+.nav{display:flex;justify-content:space-between;padding:10px;border-radius:999px;box-shadow:var(--inset)}
+.nav button{border:0;background:none;font:500 12px var(--sans);letter-spacing:.06em;color:var(--text2);padding:10px 14px;border-radius:999px;cursor:pointer}
+.nav button.on{background:var(--surface);color:var(--text);box-shadow:var(--raised-sm)}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.sw{width:56px;text-align:center;font:400 10px var(--sans);color:var(--text2)}
+.sw i{display:block;height:44px;border-radius:12px;margin-bottom:6px;box-shadow:var(--raised-sm)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>peanits · style board</h1>
+    <p>Black &amp; white neumorphism, conservatory tone. Two type pairings, same kit. Everything here is interactive where it looks it.</p>
+  </div>
+  <button class="btn" id="themeBtn" aria-pressed="false">◐ Toggle light / dark</button>
+</header>
+
+<main class="pair-grid" id="grid"></main>
+
+<template id="kit">
+  <section class="kit">
+    <div class="pairname"></div>
+
+    <div class="sec">
+      <p class="wordmark">peanits</p>
+      <div class="label">Free sight-reading for pianists</div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Grade II · Unit 3</div>
+      <h2 class="h">Reading ahead of your hands</h2>
+      <p class="body">Sight-reading is the art of playing music you have never seen, one beat ahead of where your fingers are.</p>
+    </div>
+
+    <div class="sec">
+      <div class="label">Buttons · five states</div>
+      <div class="row">
+        <div class="bcol"><button class="btn">Begin</button><div class="btn-cap">Default</div></div>
+        <div class="bcol"><button class="btn is-hover">Begin</button><div class="btn-cap">Hover</div></div>
+        <div class="bcol"><button class="btn is-pressed">Begin</button><div class="btn-cap">Pressed</div></div>
+        <div class="bcol"><button class="btn is-active">Begin</button><div class="btn-cap">Active</div></div>
+        <div class="bcol"><button class="btn" disabled>Begin</button><div class="btn-cap">Disabled</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Controls</div>
+      <div class="row">
+        <label class="toggle"><input type="checkbox" checked><span></span>Microphone</label>
+        <label class="toggle"><input type="checkbox"><span></span>MIDI keyboard</label>
+        <label class="toggle"><input type="checkbox" checked><span></span>Metronome</label>
+      </div>
+      <div class="dialwrap">
+        <div class="dial" aria-hidden="true"><i></i><b></b></div>
+        <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:14px">
+          <div class="lcd"><small>Tempo</small><span class="bpm">♩ = 72</span></div>
+          <div class="slider"><input class="tempo" type="range" min="40" max="208" value="72" aria-label="Tempo"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Staff on paper · feedback without colour (click the rings)</div>
+      <div class="paper">
+        <svg viewBox="0 0 280 130" role="img" aria-label="Middle C on a treble staff">
+          <g stroke="currentColor" stroke-width="1.4">
+            <line x1="10" x2="270" y1="30" y2="30"/><line x1="10" x2="270" y1="40" y2="40"/>
+            <line x1="10" x2="270" y1="50" y2="50"/><line x1="10" x2="270" y1="60" y2="60"/>
+            <line x1="10" x2="270" y1="70" y2="70"/>
+            <line x1="122" x2="158" y1="90" y2="90"/>
+          </g>
+          <text x="16" y="86" font-size="68" fill="currentColor" font-family="'Noto Music','Apple Symbols','Bravura Text',serif">𝄞</text>
+          <ellipse cx="140" cy="90" rx="9" ry="6" fill="none" stroke="currentColor" stroke-width="3" transform="rotate(-18 140 90)"/>
+        </svg>
+      </div>
+      <div class="fb">
+        <div class="ring ok" tabindex="0" role="button" aria-label="Correct"><div>✓ C4<em>0.84 s</em></div></div>
+        <div class="ring bad" tabindex="0" role="button" aria-label="Incorrect"><div>✕ D4<em>heard</em></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Home dashboard</div>
+      <div class="card">
+        <div>
+          <div class="label">Continue</div>
+          <h3>Bass clef · ledger lines</h3>
+        </div>
+        <div class="progress">
+          <div class="track"><div></div></div>
+          <span class="label">62%</span>
+          <button class="play" aria-label="Continue">▶</button>
+        </div>
+        <div class="two">
+          <div class="mini"><div class="label">Today's étude</div><strong>5 min</strong><button class="btn is-active">Begin</button></div>
+          <div class="mini"><div class="label">Streak</div><strong>12 days</strong>
+            <div class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span><span></span></div></div>
+        </div>
+        <div>
+          <div class="label" style="margin-bottom:10px">Slowest notes</div>
+          <div class="heat"></div>
+          <div class="legend" style="margin-top:8px"><span>quicker</span><span>slower</span></div>
+        </div>
+        <nav class="nav" aria-label="Main">
+          <button class="on">Home</button><button>Practice</button><button>Path</button><button>Library</button><button>Learn</button>
+        </nav>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Palette</div>
+      <div class="swatches">
+        <div class="sw"><i style="background:var(--surface)"></i>Surface</div>
+        <div class="sw"><i style="background:var(--hi)"></i>Highlight</div>
+        <div class="sw"><i style="background:var(--lo)"></i>Depth</div>
+        <div class="sw"><i style="background:var(--text)"></i>Text</div>
+        <div class="sw"><i style="background:var(--text2)"></i>Text 2</div>
+        <div class="sw"><i style="background:var(--paper)"></i>Paper</div>
+        <div class="sw"><i style="background:var(--pri-bg)"></i>Primary</div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+const PAIRS = { A: "A · Newsreader + Inter", B: "B · Cormorant Garamond + Jost" };
+const NOTES = ["C","D","E","F","G","A","B","C"];
+const SHADE = [.1,.55,.2,.8,.35,.15,.65,.3]; // pretend slowness, 0..1
+const grid = document.getElementById("grid");
+const tpl = document.getElementById("kit");
+
+for (const key of Object.keys(PAIRS)) {
+  const kit = tpl.content.firstElementChild.cloneNode(true);
+  kit.dataset.pair = key;
+  kit.querySelector(".pairname").textContent = PAIRS[key];
+
+  const heat = kit.querySelector(".heat");
+  NOTES.forEach((n, i) => {
+    const c = document.createElement("div");
+    const s = SHADE[i];
+    c.textContent = n;
+    c.style.background = `color-mix(in srgb, var(--text) ${Math.round(s*70)}%, var(--surface))`;
+    c.style.color = s > .4 ? "var(--surface)" : "var(--text)";
+    heat.appendChild(c);
+  });
+
+  const dialB = kit.querySelector(".dial b"), bpm = kit.querySelector(".bpm"), r = kit.querySelector(".tempo");
+  const setTempo = () => {
+    const v = +r.value;
+    bpm.textContent = "♩ = " + v;
+    dialB.style.transform = `rotate(${-135 + (v - 40) / (208 - 40) * 270}deg)`;
+  };
+  r.addEventListener("input", setTempo); setTempo();
+
+  const bad = kit.querySelector(".ring.bad");
+  const shake = () => { bad.classList.remove("shake"); void bad.offsetWidth; bad.classList.add("shake"); };
+  bad.addEventListener("click", shake);
+  bad.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") shake(); });
+
+  kit.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => {
+    kit.querySelectorAll(".nav button").forEach(x => x.classList.remove("on")); b.classList.add("on");
+  }));
+  grid.appendChild(kit);
+}
+
+const root = document.documentElement, btn = document.getElementById("themeBtn");
+btn.addEventListener("click", () => {
+  const dark = (root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark";
+  root.dataset.theme = dark ? "light" : "dark";
+  btn.setAttribute("aria-pressed", String(!dark));
+});
+</script>
+</body>
+</html>
