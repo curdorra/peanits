@@ -10,7 +10,7 @@ export default function InputTest() {
   return (
     <div className="stack" style={{ gap: 16 }}>
       <div className="row">
-        <button className="btn" onClick={() => (l.active ? l.stop() : l.start(source))}>
+        <button className="btn" onClick={() => (l.active ? l.stop() : l.start(source === "screen" ? "mic" : source))}>
           <span>{l.active ? "Stop listening" : "Test input"}</span>
         </button>
       </div>

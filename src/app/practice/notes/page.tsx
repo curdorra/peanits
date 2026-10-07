@@ -20,7 +20,8 @@ export default function PathPage() {
   return (
     <main className="wrap page">
       <div className="stack">
-        <h1 className="display">Path</h1>
+        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/practice">Practise</Link><span>/</span></nav>
+        <h1 className="display">Note reading</h1>
         <p className="muted">Reach {Math.round(PASS_ACCURACY * 100)}% on the first try to complete a unit and draw its scene.</p>
       </div>
 
@@ -29,8 +30,8 @@ export default function PathPage() {
         const offset = UNITS.findIndex((u) => u.grade === g);
         return (
           <section key={g} className="stack" style={{ gap: 18 }} aria-labelledby={`g${g}`}>
-            <h2 id={`g${g}`} className="title">Grade {ROMAN[g]}</h2>
-            <PathSystem units={units} passed={passed} offset={offset} label={`Grade ${ROMAN[g]}`} />
+            <h2 id={`g${g}`} className="title">Stage {ROMAN[g]}</h2>
+            <PathSystem units={units} passed={passed} offset={offset} label={`Stage ${ROMAN[g]}`} />
             <div>
               {units.map((u, i) => {
                 const s = p.units[u.id];

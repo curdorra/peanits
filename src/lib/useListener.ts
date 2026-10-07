@@ -37,9 +37,10 @@ export function useListener(onNote: (midi: number) => void) {
   }, []);
 
   const start = useCallback(
-    async (source: "mic" | "midi"): Promise<boolean> => {
+    async (source: "mic" | "midi" | "screen"): Promise<boolean> => {
       stop();
       setError(null);
+      if (source === "screen") return true; // on-screen keys call the handler directly
       try {
         if (source === "mic") {
           session.current = await startMic((f: PitchFrame | null) => {

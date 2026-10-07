@@ -6,9 +6,9 @@ import { UNITS } from "@/lib/curriculum";
 import { streakOf, useProgress } from "@/lib/progress";
 
 const CHOICES = [
-  { href: "/practice", title: "Practise", text: "Read a note on the staff and play it." },
-  { href: "/path", title: "Path", text: "Work through the grades, one unit at a time." },
-  { href: "/learn", title: "Learn", text: "Guides on reading, theory and the piano's history." },
+  { href: "/practice", title: "Practise", text: "Sight-read melodies, read notes, train your ear and rhythm." },
+  { href: "/grades", title: "Grades", text: "ABRSM and Trinity exams, grade by grade, with free scores." },
+  { href: "/learn", title: "Learn", text: "Hands-on lessons, composers, history and a glossary." },
 ];
 
 export default function Home() {

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Staff, { type Mark } from "./Staff";
+import Keyboard from "./Keyboard";
+import SourcePicker from "./SourcePicker";
 import { PASS_ACCURACY } from "@/lib/curriculum";
 import { midiName, poolFor, type Alter, type Section, type Target } from "@/lib/notes";
 import { progressStore, recordRound, settingsStore, useSettings, weightFor, type Attempt } from "@/lib/progress";
@@ -54,6 +56,7 @@ export default function Drill(props: Props) {
   const [phase, setPhase] = useState<Phase>("ready");
   const [target, setTarget] = useState<Target | null>(null);
   const [mark, setMark] = useState<Mark>(null);
+  const [kb, setKb] = useState<[number, number]>([60, 72]);
   const [index, setIndex] = useState(0);
   const [summary, setSummary] = useState<{ hits: number; total: number; medianMs: number; passed: boolean } | null>(null);
 
@@ -114,6 +117,8 @@ export default function Drill(props: Props) {
 
   async function begin() {
     poolRef.current = poolFor(sections, alters);
+    const ms = poolRef.current.map((t) => t.note.midi);
+    setKb([Math.min(...ms) - 1, Math.max(...ms) + 1]);
     attempts.current = [];
     setIndex(0);
     setSummary(null);
@@ -179,6 +184,9 @@ export default function Drill(props: Props) {
         <p className="muted num" aria-live="polite" style={{ minHeight: "1.6em" }}>
           {heard ? `heard ${midiName(heard.midi)}` : "\u00a0"}
         </p>
+        {settings.source === "screen" && (
+          <Keyboard low={kb[0]} high={kb[1]} onKey={(m) => onNoteRef.current(m)} />
+        )}
         <p className="muted small num">{Math.min(index + 1, length)} / {length}</p>
         <button className="tbtn" onClick={quit}>Stop</button>
       </div>
@@ -194,19 +202,13 @@ export default function Drill(props: Props) {
         </>
       )}
 
-      <div className="row" role="group" aria-label="Listen with" style={{ justifyContent: "center", gap: 28 }}>
-        {(["mic", "midi"] as const).map((s) => (
-          <button key={s} className="tbtn" aria-pressed={settings.source === s} onClick={() => settingsStore.update((x) => ({ ...x, source: s }))}>
-            {s === "mic" ? "Microphone" : "MIDI keyboard"}
-          </button>
-        ))}
-      </div>
+      <SourcePicker />
 
       {listener.error && <div className="alert" role="alert">{listener.error}</div>}
       <button className="btn solid" onClick={begin}><span>Begin</span></button>
       <Link className="tbtn" href={backHref}>{backLabel}</Link>
       <p className="muted small">
-        Your audio stays on your device. <Link href="/learn/how-peanits-listens">How listening works</Link>
+        Your audio stays on your device. <Link href="/learn/read/how-peanits-listens">How listening works</Link>
       </p>
     </div>
   );

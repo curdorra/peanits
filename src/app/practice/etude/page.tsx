@@ -31,7 +31,7 @@ export default function Etude() {
         backLabel="Back to practice"
       />
       <p className="muted center" style={{ textAlign: "center" }}>
-        <Link href="/path">See the path</Link>
+        <Link href="/practice/notes">All stages</Link>
       </p>
     </main>
   );

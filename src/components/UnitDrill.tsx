@@ -14,8 +14,8 @@ export default function UnitDrill({ unit, nextId }: { unit: Unit; nextId?: strin
       alters={unit.alters}
       length={length}
       unitId={unit.id}
-      backHref="/path"
-      backLabel="Back to the path"
+      backHref="/practice/notes"
+      backLabel="All stages"
       nextHref={nextId ? `/practice/unit/${nextId}` : undefined}
     />
   );

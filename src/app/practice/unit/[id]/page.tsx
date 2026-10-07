@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/practice/unit/[id]">): Promise<Metadata> {
   const { id } = await params;
   const u = unitById(id);
-  return { title: u ? `${u.title} · Grade ${ROMAN[u.grade]}` : "Practice" };
+  return { title: u ? `${u.title} · Stage ${ROMAN[u.grade]}` : "Practice" };
 }
 
 export default async function Page({ params }: PageProps<"/practice/unit/[id]">) {

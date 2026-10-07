@@ -7,13 +7,13 @@ export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/learn/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/learn/read/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const a = articleBySlug(slug);
   return a ? { title: a.title, description: a.blurb } : {};
 }
 
-export default async function Article({ params }: PageProps<"/learn/[slug]">) {
+export default async function Article({ params }: PageProps<"/learn/read/[slug]">) {
   const { slug } = await params;
   const a = articleBySlug(slug);
   if (!a) notFound();
@@ -24,7 +24,7 @@ export default async function Article({ params }: PageProps<"/learn/[slug]">) {
     <main className="wrap page">
       <article className="stack" style={{ gap: 32 }}>
         <div className="stack">
-          <Link className="tbtn" href="/learn" style={{ alignSelf: "flex-start" }}>← Learn</Link>
+          <Link className="tbtn" href="/learn/read" style={{ alignSelf: "flex-start" }}>← Reading room</Link>
           <h1 className="display">{a.title}</h1>
         </div>
         <div className="prose">
@@ -35,7 +35,7 @@ export default async function Article({ params }: PageProps<"/learn/[slug]">) {
             return <p key={k} className="aside">{b.text}</p>;
           })}
         </div>
-        {next && <Link className="tbtn" href={`/learn/${next.slug}`} style={{ alignSelf: "flex-end" }}>{next.title} →</Link>}
+        {next && <Link className="tbtn" href={`/learn/read/${next.slug}`} style={{ alignSelf: "flex-end" }}>{next.title} →</Link>}
       </article>
     </main>
   );

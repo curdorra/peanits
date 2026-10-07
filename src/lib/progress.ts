@@ -10,11 +10,13 @@ export type Progress = {
   units: Record<string, UnitStat>;
   days: string[]; // YYYY-MM-DD (local) on which a round was completed
   rounds: number;
+  lessons: Record<string, boolean>; // completed Learn lessons
 };
 
-export type Settings = { source: "mic" | "midi"; length: number };
+export type Source = "mic" | "midi" | "screen";
+export type Settings = { source: Source; length: number };
 
-export const progressStore = createStore<Progress>("peanits-progress-v1", { notes: {}, units: {}, days: [], rounds: 0 });
+export const progressStore = createStore<Progress>("peanits-progress-v1", { notes: {}, units: {}, days: [], rounds: 0, lessons: {} });
 export const settingsStore = createStore<Settings>("peanits-settings-v1", { source: "mic", length: 20 });
 
 export const useProgress = progressStore.use;
@@ -43,7 +45,7 @@ export function recordRound(attempts: Attempt[], unitId?: string) {
     }
     const today = dayKey();
     const days = p.days.includes(today) ? p.days : [...p.days, today].slice(-400);
-    return { notes, units, days, rounds: p.rounds + 1 };
+    return { ...p, notes, units, days, rounds: p.rounds + 1 };
   });
 }
 
@@ -81,4 +83,8 @@ export function weightFor(midi: number, notes: Record<string, NoteStat>): number
   const miss = 1 - s.hit / s.n;
   const slow = Math.min(avgMs(s) / 4000, 1);
   return 0.6 + 2 * miss + slow;
+}
+
+export function completeLesson(slug: string) {
+  progressStore.update((p) => ({ ...p, lessons: { ...p.lessons, [slug]: true } }));
 }

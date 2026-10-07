@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EB_Garamond } from "next/font/google";
+import { EB_Garamond, Noto_Music } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -10,6 +10,9 @@ const garamond = EB_Garamond({
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
 });
+
+// Only used for ♭ ♯ ♮ and other music symbols that EB Garamond lacks.
+const music = Noto_Music({ variable: "--font-music", weight: "400", subsets: ["music"], adjustFontFallback: false });
 
 export const metadata: Metadata = {
   title: { default: "peanits · free sight-reading for pianists", template: "%s · peanits" },
@@ -22,7 +25,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem('peanits-theme')
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={garamond.variable} suppressHydrationWarning>
+    <html lang="en" className={`${garamond.variable} ${music.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

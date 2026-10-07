@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import InputTest from "@/components/InputTest";
-import { progressStore, settingsStore, useSettings } from "@/lib/progress";
+import SourcePicker from "@/components/SourcePicker";
+import { progressStore, useSettings } from "@/lib/progress";
 
 export default function Settings() {
   const s = useSettings();
@@ -12,16 +13,10 @@ export default function Settings() {
     <main className="wrap page">
       <h1 className="display">Settings</h1>
 
-      <section className="stack" style={{ gap: 18 }}>
+      <section className="stack" style={{ gap: 18, alignItems: "flex-start" }}>
         <h2 className="title">Listen with</h2>
-        <div className="row" role="group" aria-label="Input source" style={{ gap: 28 }}>
-          {(["mic", "midi"] as const).map((v) => (
-            <button key={v} className="tbtn" aria-pressed={s.source === v} onClick={() => settingsStore.update((x) => ({ ...x, source: v }))}>
-              {v === "mic" ? "Microphone" : "MIDI keyboard"}
-            </button>
-          ))}
-        </div>
-        <InputTest />
+        <SourcePicker />
+        {s.source !== "screen" && <InputTest />}
       </section>
 
       <section className="stack" style={{ gap: 14 }}>
