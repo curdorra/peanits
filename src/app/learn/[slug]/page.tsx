@@ -18,18 +18,15 @@ export default async function Article({ params }: PageProps<"/learn/[slug]">) {
   const a = articleBySlug(slug);
   if (!a) notFound();
   const i = ARTICLES.findIndex((x) => x.slug === slug);
-  const prev = ARTICLES[i - 1];
   const next = ARTICLES[i + 1];
 
   return (
     <main className="wrap page">
-      <article className="stack" style={{ gap: 28 }}>
+      <article className="stack" style={{ gap: 32 }}>
         <div className="stack">
-          <Link className="tbtn" href="/learn" style={{ alignSelf: "flex-start" }}>← The learning shelf</Link>
-          <div className="label">{a.category} · {a.minutes} min read</div>
+          <Link className="tbtn" href="/learn" style={{ alignSelf: "flex-start" }}>← Learn</Link>
           <h1 className="display">{a.title}</h1>
         </div>
-        <hr className="rule" />
         <div className="prose">
           {a.blocks.map((b, k) => {
             if (b.t === "h2") return <h2 key={k}>{b.text}</h2>;
@@ -38,11 +35,7 @@ export default async function Article({ params }: PageProps<"/learn/[slug]">) {
             return <p key={k} className="aside">{b.text}</p>;
           })}
         </div>
-        <hr className="rule" />
-        <nav className="row" style={{ justifyContent: "space-between" }} aria-label="More guides">
-          {prev ? <Link className="tbtn" href={`/learn/${prev.slug}`}>← {prev.title}</Link> : <span />}
-          {next ? <Link className="tbtn" href={`/learn/${next.slug}`}>{next.title} →</Link> : <span />}
-        </nav>
+        {next && <Link className="tbtn" href={`/learn/${next.slug}`} style={{ alignSelf: "flex-end" }}>{next.title} →</Link>}
       </article>
     </main>
   );

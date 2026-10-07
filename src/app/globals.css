@@ -58,8 +58,8 @@ p { margin: 0; }
 .rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 
 /* ---- layout ---- */
-.wrap { width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 28px; }
-.page { padding-top: 44px; padding-bottom: 90px; display: flex; flex-direction: column; gap: 44px; flex: 1; }
+.wrap { width: 100%; max-width: 880px; margin: 0 auto; padding: 0 28px; }
+.page { padding-top: 64px; padding-bottom: 110px; display: flex; flex-direction: column; gap: 56px; flex: 1; }
 .stack { display: flex; flex-direction: column; gap: 16px; }
 .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 24px; }
@@ -74,7 +74,10 @@ p { margin: 0; }
   padding: 8px 2px; background: linear-gradient(var(--ink), var(--ink)) 50% 100% / 0 1px no-repeat; transition: background-size 0.25s, color 0.2s;
 }
 .nav a:hover, .nav a[aria-current="page"] { color: var(--ink); background-size: 100% 1px; }
-.site-foot { border-top: 1px solid var(--rule); padding: 28px 0 40px; text-align: center; font-size: 0.85rem; color: var(--ink2); line-height: 1.7; }
+.site-foot { padding: 28px 0 40px; font-size: 0.85rem; color: var(--ink2); }
+.foot-row { display: flex; gap: 8px 26px; justify-content: center; align-items: center; flex-wrap: wrap; }
+.foot-row .tbtn { color: var(--ink2); }
+.foot-row .tbtn:hover { color: var(--ink); }
 
 /* ---- buttons ---- */
 .btn {
@@ -160,3 +163,15 @@ p { margin: 0; }
 
 .metro { width: 120px; height: auto; flex: none; }
 @media (max-width: 640px) { .metro { display: none; } }
+
+/* ---- quieter pages ---- */
+.small { font-size: 0.9rem; }
+.drill a:not(.btn):not(.tbtn) { text-underline-offset: 3px; }
+.unit-row { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; text-decoration: none; border-bottom: 1px solid var(--rule); }
+.unit-row:hover span:first-child { text-decoration: underline; text-underline-offset: 4px; }
+.unit-row span:last-child { color: var(--ink2); font-feature-settings: "lnum", "tnum"; }
+.home { flex-direction: row; align-items: center; justify-content: space-between; gap: 48px; flex-wrap: wrap; }
+
+/* text-style choice: the selected option is underlined */
+.tbtn[aria-pressed] { color: var(--ink2); }
+.tbtn[aria-pressed="true"] { color: var(--ink); background-size: 100% 1px; }

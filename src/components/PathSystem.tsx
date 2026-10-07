@@ -35,13 +35,11 @@ const SCENES: ((p: Pen) => string)[] = [
 export default function PathSystem({
   units,
   passed,
-  nextId,
   offset,
   label,
 }: {
   units: Unit[];
   passed: Record<string, boolean>;
-  nextId?: string;
   offset: number; // index of the first unit in the overall curriculum, keeps scenes varied
   label: string;
 }) {
@@ -60,8 +58,7 @@ export default function PathSystem({
       s += `<g transform="translate(${x},0)">${SCENES[(offset + i) % SCENES.length](createPen(5000 + (offset + i) * 31))}</g>`;
     }
     const cx = x + M / 2;
-    const status = passed[u.id] ? " ✓" : u.id === nextId ? "  ·  next" : "";
-    s += `<text class="sysl" x="${cx}" y="112">Unit ${i + 1}${status}</text>`;
+    s += `<text class="sysl" x="${cx}" y="108">${i + 1}${passed[u.id] ? " ✓" : ""}</text>`;
   });
   return (
     <svg

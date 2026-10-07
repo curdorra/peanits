@@ -20,11 +20,11 @@ const ALTERS: Record<Acc, Alter[]> = { none: [0], sharps: [0, 1], flats: [0, -1]
 function Choice<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: [T, string][]; onChange: (v: T) => void }) {
   return (
     <div className="stack" style={{ gap: 10 }}>
-      <div className="label">{label}</div>
-      <div className="row" role="group" aria-label={label}>
+      <h2 className="title" style={{ fontSize: "1.3rem" }}>{label}</h2>
+      <div className="row" role="group" aria-label={label} style={{ gap: 28 }}>
         {options.map(([v, text]) => (
-          <button key={v} className="btn" aria-pressed={value === v} onClick={() => onChange(v)}>
-            <span>{text}</span>
+          <button key={v} className="tbtn" aria-pressed={value === v} onClick={() => onChange(v)}>
+            {text}
           </button>
         ))}
       </div>
@@ -45,18 +45,15 @@ export default function Custom() {
 
   return (
     <main className="wrap page">
-      <div className="stack">
-        <div className="label">Practice</div>
-        <h1 className="display">Custom étude</h1>
-      </div>
+      <h1 className="display">Custom étude</h1>
       <div className="stack" style={{ gap: 26 }}>
         <Choice label="Clef" value={clef} onChange={setClef} options={[["treble", "Treble"], ["bass", "Bass"], ["both", "Both"]]} />
         <Choice label="Range" value={range} onChange={setRange} options={[["near", "Near middle C"], ["staves", "On the staves"], ["wide", "With ledger lines"]]} />
         <Choice label="Accidentals" value={acc} onChange={setAcc} options={[["none", "None"], ["sharps", "Sharps"], ["flats", "Flats"], ["both", "Both"]]} />
       </div>
-      <hr className="rule" />
       <Drill
         title="Custom"
+        compact
         detail="Your own choice of clef, range and accidentals. Rounds here count towards your note statistics but not towards unit progress."
         sections={sections}
         alters={ALTERS[acc]}

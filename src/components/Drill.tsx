@@ -18,6 +18,7 @@ type Props = {
   backHref: string;
   backLabel: string;
   nextHref?: string; // shown after a passed unit
+  compact?: boolean; // hide the heading and description (when the page already shows them)
 };
 
 type Phase = "ready" | "playing" | "done";
@@ -47,14 +48,13 @@ const median = (xs: number[]) => {
 };
 
 export default function Drill(props: Props) {
-  const { title, detail, sections, alters, length, unitId, backHref, backLabel, nextHref } = props;
+  const { title, detail, sections, alters, length, unitId, backHref, backLabel, nextHref, compact } = props;
   const settings = useSettings();
 
   const [phase, setPhase] = useState<Phase>("ready");
   const [target, setTarget] = useState<Target | null>(null);
   const [mark, setMark] = useState<Mark>(null);
   const [index, setIndex] = useState(0);
-  const [lastMs, setLastMs] = useState<number | null>(null);
   const [summary, setSummary] = useState<{ hits: number; total: number; medianMs: number; passed: boolean } | null>(null);
 
   // Mutable round state lives in refs so the input callback never reads stale values.
@@ -102,7 +102,6 @@ export default function Drill(props: Props) {
       const ms = Math.round(now - c.shownAt);
       attempts.current.push({ midi, hit: !c.missed, ms });
       c.locked = true;
-      setLastMs(ms);
       setMark("ok");
       const hitMidi = c.target.note.midi;
       later(() => advance(hitMidi), SETTLE_MS);
@@ -117,7 +116,6 @@ export default function Drill(props: Props) {
     poolRef.current = poolFor(sections, alters);
     attempts.current = [];
     setIndex(0);
-    setLastMs(null);
     setSummary(null);
     const ok = await listener.start(settings.source);
     if (!ok) return;
@@ -151,31 +149,19 @@ export default function Drill(props: Props) {
   });
   useEffect(() => clearTimers, []);
 
-  const rangeText = sections
-    .map((s) => `${s.clef === "treble" ? "Treble" : "Bass"} ${midiName(s.low)}–${midiName(s.high)}`)
-    .join(" · ");
-
   /* ---------- views ---------- */
   if (phase === "done" && summary) {
-    const pct = Math.round((summary.hits / Math.max(1, summary.total)) * 100);
     return (
       <div className="drill">
-        <div className="label">Étude complete</div>
-        <h1 className="display">{title}</h1>
-        <div className="readout">
-          <div><span className="label">First try</span><b>{summary.hits} / {summary.total}</b></div>
-          <div><span className="label">Accuracy</span><b>{pct}%</b></div>
-          <div><span className="label">Median time</span><b>{(summary.medianMs / 1000).toFixed(1)}s</b></div>
-        </div>
-        {unitId && (
-          <p className="muted" style={{ maxWidth: "46ch" }}>
-            {summary.passed
-              ? "Unit complete. Well read."
-              : `You need ${Math.round(PASS_ACCURACY * 100)}% on the first try to complete this unit. Another round will help.`}
-          </p>
-        )}
-        <div className="row" style={{ justifyContent: "center" }}>
-          <button className="btn solid" onClick={begin}><span>Play again</span></button>
+        <h1 className="display num">
+          {summary.hits} of {summary.total}
+        </h1>
+        <p className="muted">
+          on the first try
+          {unitId && (summary.passed ? " · unit complete" : ` · ${Math.round(PASS_ACCURACY * 100)}% completes this unit`)}
+        </p>
+        <div className="row" style={{ justifyContent: "center", gap: 22 }}>
+          <button className="btn solid" onClick={begin}><span>Again</span></button>
           {summary.passed && nextHref && <Link className="btn" href={nextHref}><span>Next unit</span></Link>}
           <Link className="tbtn" href={backHref}>{backLabel}</Link>
         </div>
@@ -187,31 +173,13 @@ export default function Drill(props: Props) {
     const heard = listener.heard;
     return (
       <div className="drill">
-        <div className="label">Étude · {title}</div>
         <div className="stage">
           <Staff note={target.note} clef={target.clef} mark={mark} />
         </div>
-        <div className="readout" aria-live="polite">
-          <div>
-            <span className="label">Heard</span>
-            <b>{heard ? midiName(heard.midi) : "–"}</b>
-            <span className="muted" style={{ fontSize: "0.8rem" }}>
-              {heard && settings.source === "mic" ? `${heard.cents > 0 ? "+" : ""}${heard.cents}¢` : " "}
-            </span>
-          </div>
-          <div>
-            <span className="label">Last</span>
-            <b>{lastMs !== null ? `${(lastMs / 1000).toFixed(1)}s` : "–"}</b>
-            <span>{" "}</span>
-          </div>
-        </div>
-        <div className="row" style={{ width: "min(100%, 460px)" }}>
-          <div className="pbar" aria-hidden="true">
-            <i style={{ width: `${(index / length) * 100}%` }} />
-            <b style={{ left: `${(index / length) * 100}%` }} />
-          </div>
-          <span className="label num">{Math.min(index + 1, length)} / {length}</span>
-        </div>
+        <p className="muted num" aria-live="polite" style={{ minHeight: "1.6em" }}>
+          {heard ? `heard ${midiName(heard.midi)}` : "\u00a0"}
+        </p>
+        <p className="muted small num">{Math.min(index + 1, length)} / {length}</p>
         <button className="tbtn" onClick={quit}>Stop</button>
       </div>
     );
@@ -219,29 +187,27 @@ export default function Drill(props: Props) {
 
   return (
     <div className="drill">
-      <div className="label">Étude</div>
-      <h1 className="display">{title}</h1>
-      <p className="muted" style={{ maxWidth: "46ch" }}>{detail}</p>
-      <div className="label">{rangeText}{alters.some((a) => a !== 0) ? " · with accidentals" : ""} · {length} notes</div>
+      {!compact && (
+        <>
+          <h1 className="display">{title}</h1>
+          <p className="muted" style={{ maxWidth: "40ch" }}>{detail}</p>
+        </>
+      )}
 
-      <div className="stack" style={{ alignItems: "center" }}>
-        <div className="label">Listen with</div>
-        <div className="row" role="group" aria-label="Input source">
-          {(["mic", "midi"] as const).map((s) => (
-            <button key={s} className="btn" aria-pressed={settings.source === s} onClick={() => settingsStore.update((x) => ({ ...x, source: s }))}>
-              <span>{s === "mic" ? "Microphone" : "MIDI keyboard"}</span>
-            </button>
-          ))}
-        </div>
+      <div className="row" role="group" aria-label="Listen with" style={{ justifyContent: "center", gap: 28 }}>
+        {(["mic", "midi"] as const).map((s) => (
+          <button key={s} className="tbtn" aria-pressed={settings.source === s} onClick={() => settingsStore.update((x) => ({ ...x, source: s }))}>
+            {s === "mic" ? "Microphone" : "MIDI keyboard"}
+          </button>
+        ))}
       </div>
 
       {listener.error && <div className="alert" role="alert">{listener.error}</div>}
       <button className="btn solid" onClick={begin}><span>Begin</span></button>
-      <p className="muted" style={{ fontSize: "0.85rem", maxWidth: "52ch" }}>
-        One note at a time. Play the note shown; it moves on when it hears the right one.{" "}
-        <Link href="/learn/how-peanits-listens" style={{ textUnderlineOffset: 3 }}>How listening works</Link>.
-      </p>
       <Link className="tbtn" href={backHref}>{backLabel}</Link>
+      <p className="muted small">
+        Your audio stays on your device. <Link href="/learn/how-peanits-listens">How listening works</Link>
+      </p>
     </div>
   );
 }

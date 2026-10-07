@@ -2,13 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ThemeToggle from "./ThemeToggle";
 
 const LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/practice", label: "Practice" },
   { href: "/path", label: "Path" },
-  { href: "/library", label: "Library" },
   { href: "/learn", label: "Learn" },
   { href: "/settings", label: "Settings" },
 ];
@@ -29,7 +25,6 @@ export default function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <ThemeToggle />
       </div>
     </header>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { EB_Garamond } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const garamond = EB_Garamond({
   variable: "--font-garamond",
@@ -29,10 +30,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader />
         {children}
         <footer className="site-foot">
-          <div className="wrap">
-            Free, forever. Made by Yirschen.
-            <br />
-            Everything runs in your browser; your audio never leaves your device.
+          <div className="wrap foot-row">
+            <span>Free, forever. Made by Yirschen.</span>
+            <a className="tbtn" href="https://ko-fi.com/yirschen" target="_blank" rel="noopener noreferrer">
+              Support on Ko-fi
+            </a>
+            <ThemeToggle />
           </div>
         </footer>
       </body>

@@ -13,7 +13,6 @@ export default function InputTest() {
         <button className="btn" onClick={() => (l.active ? l.stop() : l.start(source))}>
           <span>{l.active ? "Stop listening" : "Test input"}</span>
         </button>
-        <span className="label">{source === "mic" ? "Microphone" : "MIDI keyboard"}</span>
       </div>
       {l.error && <div className="alert" role="alert">{l.error}</div>}
       {l.active && (
@@ -33,8 +32,8 @@ export default function InputTest() {
           )}
         </div>
       )}
-      <p className="muted" style={{ fontSize: "0.9rem", maxWidth: "52ch" }}>
-        Play a note. If the name shown is right and steady, you&apos;re ready. If it jumps around, move closer to the piano or try a quieter room.
+      <p className="muted small" style={{ maxWidth: "48ch" }}>
+        Play a note. If the name is right and steady, you&apos;re ready.
       </p>
     </div>
   );
