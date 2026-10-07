@@ -8,14 +8,17 @@ export default function Learn() {
   return (
     <main className="wrap page">
       <h1 className="display">Learn</h1>
-      <div className="stack" style={{ gap: 0 }}>
+      <nav className="choices" aria-label="Guides">
         {ARTICLES.map((a) => (
-          <Link key={a.slug} href={`/learn/${a.slug}`} className="card-link">
-            <h2 style={{ fontSize: "1.45rem" }}>{a.title}</h2>
-            <p className="muted">{a.blurb}</p>
+          <Link key={a.slug} href={`/learn/${a.slug}`} className="choice">
+            <div>
+              <h2 style={{ fontSize: "1.5rem" }}>{a.title}</h2>
+              <p>{a.blurb}</p>
+            </div>
+            <span className="go" aria-hidden="true">→</span>
           </Link>
         ))}
-      </div>
+      </nav>
     </main>
   );
 }

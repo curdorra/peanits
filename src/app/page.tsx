@@ -2,31 +2,38 @@
 
 import Link from "next/link";
 import Metronome from "@/components/Metronome";
-import { ROMAN, UNITS } from "@/lib/curriculum";
+import { UNITS } from "@/lib/curriculum";
 import { streakOf, useProgress } from "@/lib/progress";
+
+const CHOICES = [
+  { href: "/practice", title: "Practise", text: "Read a note on the staff and play it." },
+  { href: "/path", title: "Path", text: "Work through the grades, one unit at a time." },
+  { href: "/learn", title: "Learn", text: "Guides on reading, theory and the piano's history." },
+];
 
 export default function Home() {
   const p = useProgress();
-  const next = UNITS.find((u) => !p.units[u.id]?.passed);
   const done = UNITS.filter((u) => p.units[u.id]?.passed).length;
   const streak = streakOf(p.days);
 
   return (
     <main className="wrap page home">
-      <section className="stack" style={{ gap: 26, flex: "1 1 340px" }}>
-        <h1 className="display">{next ? next.title : "Every unit complete"}</h1>
-        <p className="muted" style={{ maxWidth: "36ch" }}>
-          {next ? `Grade ${ROMAN[next.grade]}. ${next.blurb}` : "Keep your reading sharp with today's étude."}
-        </p>
-        <div className="row" style={{ gap: 26 }}>
-          <Link className="btn solid" href={next ? `/practice/unit/${next.id}` : "/practice/etude"}>
-            <span>Begin</span>
-          </Link>
-          <Link className="tbtn" href="/practice">More études</Link>
-        </div>
+      <section className="stack" style={{ gap: 30, flex: "1 1 380px" }}>
+        <h1 className="display">What would you like to do?</h1>
+        <nav className="choices" aria-label="Choose what to do">
+          {CHOICES.map((c) => (
+            <Link key={c.href} href={c.href} className="choice">
+              <div>
+                <h2>{c.title}</h2>
+                <p>{c.text}</p>
+              </div>
+              <span className="go" aria-hidden="true">→</span>
+            </Link>
+          ))}
+        </nav>
         {done > 0 && (
           <p className="muted small num">
-            {done} of {UNITS.length} units{streak > 1 ? ` · ${streak}-day streak` : ""}
+            {done} of {UNITS.length} units complete{streak > 1 ? ` · ${streak}-day streak` : ""}
           </p>
         )}
       </section>

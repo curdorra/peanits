@@ -3,11 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const LINKS = [
-  { href: "/path", label: "Path" },
-  { href: "/learn", label: "Learn" },
-  { href: "/settings", label: "Settings" },
-];
+const LINKS = [{ href: "/settings", label: "Settings" }];
 
 export default function SiteHeader() {
   const path = usePathname();

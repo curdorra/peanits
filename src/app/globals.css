@@ -175,3 +175,13 @@ p { margin: 0; }
 /* text-style choice: the selected option is underlined */
 .tbtn[aria-pressed] { color: var(--ink2); }
 .tbtn[aria-pressed="true"] { color: var(--ink); background-size: 100% 1px; }
+
+/* ---- choices: the main way to move around ---- */
+.choices { display: flex; flex-direction: column; flex: 1 1 380px; }
+.choice { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 26px 0; text-decoration: none; border-top: 1px solid var(--rule); }
+.choice:last-child { border-bottom: 1px solid var(--rule); }
+.choice h2 { font-size: 1.9rem; }
+.choice p { color: var(--ink2); margin-top: 4px; }
+.choice .go { font-size: 1.4rem; color: var(--ink2); transition: transform 0.2s, color 0.2s; flex: none; }
+.choice:hover .go { transform: translateX(6px); color: var(--ink); }
+.choice:hover h2 { text-decoration: underline; text-underline-offset: 6px; }
