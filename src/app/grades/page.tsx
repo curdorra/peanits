@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Independent from "@/components/Independent";
 import Choice from "@/components/Choice";
 import { boardList } from "@/content/boards";
 
@@ -18,10 +19,7 @@ export default function Grades() {
           <Choice key={b.id} href={`/grades/${b.id}`} title={b.name} text={b.blurb} />
         ))}
       </nav>
-      <p className="muted small" style={{ maxWidth: "60ch" }}>
-        peanits is independent and not connected with ABRSM or Trinity College London. Requirements are summarised from their published
-        syllabuses; always check the official syllabus before an exam.
-      </p>
+      <Independent />
     </main>
   );
 }

@@ -273,3 +273,5 @@ p { margin: 0; }
 .gloss > div { padding: 12px 0; border-bottom: 1px solid var(--rule); }
 .gloss dt { font-size: 1.1rem; }
 .gloss dd { margin: 2px 0 0; }
+.gloss dt { display: flex; align-items: baseline; gap: 14px; }
+.sym { font-family: var(--font-music), serif; font-size: 1.9rem; line-height: 1; min-width: 2.4rem; text-align: center; color: var(--ink); }

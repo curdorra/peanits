@@ -17,6 +17,10 @@ export default function Glossary() {
 
   function make(): Question {
     const t = pick(pool);
+    if (t.symbol) {
+      const names = GLOSSARY.filter((x) => x.symbol).map((x) => x.term);
+      return { prompt: t.symbol, options: optionsWith(t.term, names), answer: t.term, explain: t.meaning };
+    }
     const same = GLOSSARY.filter((x) => x.cat === t.cat).map((x) => x.meaning);
     return { prompt: t.term, options: optionsWith(t.meaning, same.length >= 4 ? same : GLOSSARY.map((x) => x.meaning)), answer: t.meaning };
   }
@@ -48,7 +52,7 @@ export default function Glossary() {
       <dl className="gloss">
         {shown.map((t) => (
           <div key={t.term}>
-            <dt>{t.term}</dt>
+            <dt>{t.symbol && <span className="sym" aria-hidden="true">{t.symbol}</span>}{t.term}</dt>
             <dd className="muted">{t.meaning}</dd>
           </div>
         ))}

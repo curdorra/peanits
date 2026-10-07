@@ -1,3 +1,4 @@
+import Independent from "@/components/Independent";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -63,6 +64,7 @@ export default async function BoardPage({ params }: PageProps<"/grades/[board]">
           </div>
         </details>
       </div>
+      <Independent />
     </main>
   );
 }

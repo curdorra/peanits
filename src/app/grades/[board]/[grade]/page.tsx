@@ -1,3 +1,4 @@
+import Independent from "@/components/Independent";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -105,6 +106,7 @@ export default async function GradePage({ params }: PageProps<"/grades/[board]/[
         {next ? <Link className="tbtn" href={`/grades/${b.id}/${next.id}`}>{next.name} →</Link> : <span />}
       </nav>
       <p className="muted small">Summarised from the {b.name} syllabus. Check the official syllabus before an exam.</p>
+      <Independent />
     </main>
   );
 }

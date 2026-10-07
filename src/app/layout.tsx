@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { EB_Garamond, Noto_Music } from "next/font/google";
 import "./globals.css";
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <footer className="site-foot">
           <div className="wrap foot-row">
             <span>Free, forever. Made by Yirschen.</span>
+            <Link className="tbtn" href="/about">About</Link>
             <a className="tbtn" href="https://ko-fi.com/yirschen" target="_blank" rel="noopener noreferrer">
               Support on Ko-fi
             </a>

@@ -1,11 +1,59 @@
-export type Term = { term: string; meaning: string; cat: Cat };
-export type Cat = "Tempo" | "Dynamics" | "Expression" | "Articulation" | "Pedal" | "Signs" | "Theory" | "Forms" | "Ornaments";
+export type Term = { term: string; meaning: string; cat: Cat; symbol?: string };
+export type Cat = "Tempo" | "Dynamics" | "Expression" | "Articulation" | "Pedal" | "Signs" | "Theory" | "Forms" | "Ornaments" | "Symbols";
 
 const t = (cat: Cat) => (term: string, meaning: string): Term => ({ term, meaning, cat });
 const tempo = t("Tempo"), dyn = t("Dynamics"), exp = t("Expression"), art = t("Articulation"), ped = t("Pedal");
+const sy = (symbol: string, term: string, meaning: string): Term => ({ symbol, term, meaning, cat: "Symbols" });
 const sign = t("Signs"), th = t("Theory"), form = t("Forms"), orn = t("Ornaments");
 
 export const GLOSSARY: Term[] = [
+  // Symbols
+  sy("𝄞", "Treble clef", "The G clef: it curls around the line for G above middle C. Usually the right hand"),
+  sy("𝄢", "Bass clef", "The F clef: its dots frame the line for F below middle C. Usually the left hand"),
+  sy("𝄡", "C clef", "Marks middle C on its line (alto and tenor clefs); rare in piano music"),
+  sy("𝄔", "Brace", "Joins the two staves of piano music so they are read together"),
+  sy("♯", "Sharp", "Raise the note by a semitone"),
+  sy("♭", "Flat", "Lower the note by a semitone"),
+  sy("♮", "Natural", "Cancel a sharp or flat: play the plain note"),
+  sy("𝄪", "Double sharp", "Raise the note by two semitones (a whole tone)"),
+  sy("𝄫", "Double flat", "Lower the note by two semitones (a whole tone)"),
+  sy("𝄴", "Common time", "A C instead of numbers: 4/4"),
+  sy("𝄵", "Cut time", "A C with a line through it: 2/2, two minim beats per bar"),
+  sy("𝅝", "Whole note (semibreve)", "Four crotchet beats long"),
+  sy("𝅗𝅥", "Half note (minim)", "Two beats long"),
+  sy("𝅘𝅥", "Quarter note (crotchet)", "One beat long"),
+  sy("𝅘𝅥𝅮", "Eighth note (quaver)", "Half a beat long; a flag, or a beam when joined to others"),
+  sy("𝅘𝅥𝅯", "Sixteenth note (semiquaver)", "A quarter of a beat long; two flags or beams"),
+  sy("𝅘𝅥𝅭", "Dotted note", "A dot adds half the note's length again"),
+  sy("𝄻", "Whole rest", "A bar of silence in most time signatures; hangs below a line"),
+  sy("𝄼", "Half rest", "Two beats of silence; sits on a line"),
+  sy("𝄽", "Quarter rest", "One beat of silence"),
+  sy("𝄾", "Eighth rest", "Half a beat of silence"),
+  sy("𝄿", "Sixteenth rest", "A quarter of a beat of silence"),
+  sy("𝄀", "Bar line", "Divides the music into bars"),
+  sy("𝄁", "Double bar line", "Marks the end of a section or a change of key or time"),
+  sy("𝄂", "Final bar line", "A thin and a thick line: the end of the piece"),
+  sy("𝄆", "Start repeat", "Go back to here when you reach the end repeat"),
+  sy("𝄇", "End repeat", "Go back to the start repeat, or to the beginning, and play again"),
+  sy("𝄋", "Segno", "A sign to return to after D.S. (dal segno)"),
+  sy("𝄌", "Coda", "Jump here when told 'to Coda'; the closing section"),
+  sy("𝄐", "Fermata", "Hold the note or rest longer than written"),
+  sy("𝄒", "Breath mark", "A tiny pause to let a phrase breathe"),
+  sy("𝄓", "Caesura", "A complete, brief stop; often written as two slashes"),
+  sy("𝆏", "Piano (p)", "Soft"),
+  sy("𝆐𝆏", "Mezzo piano (mp)", "Moderately soft"),
+  sy("𝆐𝆑", "Mezzo forte (mf)", "Moderately loud"),
+  sy("𝆑", "Forte (f)", "Loud"),
+  sy("𝆑𝆑", "Fortissimo (ff)", "Very loud"),
+  sy("𝆒", "Crescendo hairpin", "An opening wedge: gradually louder"),
+  sy("𝆓", "Diminuendo hairpin", "A closing wedge: gradually softer"),
+  sy("𝆮", "Pedal mark", "Press the sustaining pedal (Ped.), then lift where the star or bracket ends"),
+  sy("𝆃", "Wavy line before a chord", "Arpeggiate: play the chord's notes quickly from the bottom up"),
+  sy("𝆗", "Turn", "Play the note above, the note, the note below, the note again, quickly"),
+  sy("𝆘", "Inverted turn", "Play the note below, the note, the note above, the note again, quickly"),
+  sy("𝄶", "8va", "Play an octave higher than written"),
+  sy("𝄷", "8vb", "Play an octave lower than written"),
+  sy("tr", "Trill", "Rapidly alternate the written note with the note above"),
   // Tempo
   tempo("Largo", "Broadly and slowly"),
   tempo("Lento", "Slowly"),
@@ -157,7 +205,7 @@ export const GLOSSARY: Term[] = [
   orn("Glissando", "A slide across the keys"),
 ];
 
-export const CATS: Cat[] = ["Tempo", "Dynamics", "Expression", "Articulation", "Pedal", "Signs", "Theory", "Forms", "Ornaments"];
+export const CATS: Cat[] = ["Symbols", "Tempo", "Dynamics", "Expression", "Articulation", "Pedal", "Signs", "Theory", "Forms", "Ornaments"];
 
 export type Event = { year: number; label: string; text: string; era: "Before" | "Baroque" | "Classical" | "Romantic" | "Modern" };
 
