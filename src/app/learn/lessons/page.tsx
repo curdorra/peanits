@@ -5,7 +5,7 @@ import Choice from "@/components/Choice";
 import { LESSONS } from "@/content/lessons";
 import { useProgress } from "@/lib/progress";
 
-const GROUPS = ["Reading", "Rhythm", "Sound", "Theory", "Skills"] as const;
+const GROUPS = ["Reading", "Rhythm", "Sound", "Theory", "Skills", "Stories"] as const;
 
 export default function Lessons() {
   const p = useProgress();

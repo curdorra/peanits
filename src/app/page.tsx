@@ -3,7 +3,8 @@
 import Link from "next/link";
 import Metronome from "@/components/Metronome";
 import { UNITS } from "@/lib/curriculum";
-import { streakOf, useProgress } from "@/lib/progress";
+import { welcomeBack } from "@/lib/encourage";
+import { daysSinceLast, streakOf, useProgress } from "@/lib/progress";
 
 const CHOICES = [
   { href: "/practice", title: "Practise", text: "Sight-read melodies, read notes, train your ear and rhythm." },
@@ -15,6 +16,7 @@ export default function Home() {
   const p = useProgress();
   const done = UNITS.filter((u) => p.units[u.id]?.passed).length;
   const streak = streakOf(p.days);
+  const hello = welcomeBack(daysSinceLast(p.days));
 
   return (
     <main className="wrap page home">
@@ -31,6 +33,7 @@ export default function Home() {
             </Link>
           ))}
         </nav>
+        {hello && <p className="muted">{hello}</p>}
         {done > 0 && (
           <p className="muted small num">
             {done} of {UNITS.length} units complete{streak > 1 ? ` · ${streak}-day streak` : ""}

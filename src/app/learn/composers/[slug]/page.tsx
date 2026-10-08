@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { COMPOSERS, composerBySlug, lifespan } from "@/content/composers";
 import { boardList, imslp } from "@/content/boards";
+import { STORIES, noteFor } from "@/content/stories";
 
 export function generateStaticParams() {
   return COMPOSERS.map((c) => ({ slug: c.slug }));
@@ -35,6 +36,12 @@ export default async function ComposerPage({ params }: PageProps<"/learn/compose
           <p className="muted num">{lifespan(c)} · {c.from} · {c.era}</p>
         </div>
         <p className="lesson-body">{c.summary}</p>
+        {STORIES[c.slug] && (
+          <section className="lesson-body stack" style={{ gap: 14 }}>
+            <h2 className="label" style={{ fontSize: "0.72rem" }}>The story</h2>
+            {STORIES[c.slug].map((para) => <p key={para.slice(0, 24)}>{para}</p>)}
+          </section>
+        )}
         <p className="aside" style={{ maxWidth: "60ch" }}>{c.fact}</p>
 
         <div className="folds">
@@ -62,7 +69,7 @@ export default async function ComposerPage({ params }: PageProps<"/learn/compose
                 <ul className="pieces">
                   {inGrades.map(({ b, g, p }) => (
                     <li key={b.id + g.id + p.title}>
-                      <span>{p.title}<span className="who">{b.name} {g.name}</span></span>
+                      <span>{p.title}<span className="who">{b.name} {g.name}</span>{noteFor(p.title) && <span className="note">{noteFor(p.title)!.note}</span>}</span>
                       <Link href={`/grades/${b.id}/${g.id}`}>The grade →</Link>
                     </li>
                   ))}

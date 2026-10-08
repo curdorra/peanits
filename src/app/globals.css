@@ -275,3 +275,6 @@ p { margin: 0; }
 .gloss dd { margin: 2px 0 0; }
 .gloss dt { display: flex; align-items: baseline; gap: 14px; }
 .sym { font-family: var(--font-music), serif; font-size: 1.9rem; line-height: 1; min-width: 2.4rem; text-align: center; color: var(--ink); }
+.pieces .note { display: block; color: var(--ink2); font-size: 0.9rem; font-style: italic; margin-top: 4px; max-width: 56ch; }
+.cheer { max-width: 44ch; margin-inline: auto; text-align: center; font-style: italic; color: var(--ink2); }
+.moods { display: flex; flex-wrap: wrap; gap: 8px 22px; }

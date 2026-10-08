@@ -15,7 +15,7 @@ import { makeNote as n } from "@/lib/notes";
 import { click, playChord, playNote, playSequence } from "@/lib/sound";
 
 export type Step = { title: string; body: ReactNode; widget?: ReactNode };
-export type Lesson = { slug: string; title: string; blurb: string; group: "Reading" | "Rhythm" | "Sound" | "Theory" | "Skills"; steps: Step[]; quiz: QQ[] };
+export type Lesson = { slug: string; title: string; blurb: string; group: "Reading" | "Rhythm" | "Sound" | "Theory" | "Skills" | "Stories"; steps: Step[]; quiz: QQ[] };
 
 const two = (a: number, b: number) => () => playSequence([a, b], 0.6, { dur: 1 });
 const triad = (r: number, minor = false) => [r, r + (minor ? 3 : 4), r + 7];
@@ -558,6 +558,156 @@ export const LESSONS: Lesson[] = [
       { q: "If you play a wrong note while sight-reading…", options: ["keep going", "stop and fix it", "start again", "slow down a lot"], answer: "keep going" },
       { q: "Before you start, it's most useful to check…", options: ["the key and time signatures", "the composer's dates", "the page number", "the fingering only"], answer: "the key and time signatures" },
       { q: "Good sight-readers look…", options: ["a little ahead of what they're playing", "at their hands", "only at the first bar", "at the last bar first"], answer: "a little ahead of what they're playing" },
+    ],
+  },
+  {
+    slug: "the-first-piano",
+    title: "The day the harpsichord learned to whisper",
+    blurb: "Why 'piano' is short for 'soft-loud', and the Florentine who invented it.",
+    group: "Stories",
+    steps: [
+      {
+        title: "A problem with the harpsichord",
+        body: "In 1700 the best keyboard instrument was the harpsichord. It has a bright, beautiful sound, but its strings are plucked, and no matter how hard or softly you press a key, the sound is almost exactly the same. You couldn't shape a phrase with your fingers.",
+        widget: <Listen items={[{ label: "Press gently", sub: "what a harpsichord can't do", play: () => playChord([60, 64, 67], { vel: 0.2, dur: 1.4 }) }, { label: "Press firmly", sub: "…and now with weight", play: () => playChord([60, 64, 67], { vel: 0.95, dur: 1.4 }) }]} />,
+      },
+      {
+        title: "Florence, around 1700",
+        body: "At the court of the Medici in Florence, an instrument maker named Bartolomeo Cristofori built a keyboard in which little hammers struck the strings and then fell back. A harder press made a louder note; a gentle press, a softer one. A court inventory of 1700 describes a new keyboard 'that has soft and loud'.",
+      },
+      {
+        title: "A name that says it all",
+        body: "He called it a 'gravicembalo col piano e forte': a harpsichord with soft and loud. Over time the name shrank to 'pianoforte', and then 'piano'. When you play one gently or with weight, you are doing exactly what he wanted to make possible. The oldest surviving piano, built in 1720, is in a New York museum.",
+      },
+      {
+        title: "Growing bigger",
+        body: "The first pianos had around 49 keys. Composers kept asking for more notes, and makers made the instrument louder and stronger. By the late 1800s pianos had 88 keys, from A at the bottom to C at the top, which is why almost every modern piano looks the same.",
+      },
+    ],
+    quiz: [
+      { q: "What could the new piano do that a harpsichord could not?", options: ["Vary loudness by touch", "Play higher notes", "Sound with no strings", "Play without keys"], answer: "Vary loudness by touch" },
+      { q: "What does 'piano' mean in Italian music?", options: ["Soft", "Loud", "Fast", "Slow"], answer: "Soft" },
+      { q: "How many keys does a modern full-size piano have?", options: ["88", "76", "61", "100"], answer: "88" },
+    ],
+  },
+  {
+    slug: "beethoven-and-the-silence",
+    title: "Beethoven and the silence",
+    blurb: "A composer who lost his hearing, and wrote his greatest music anyway.",
+    group: "Stories",
+    steps: [
+      {
+        title: "A young star in Vienna",
+        body: "Beethoven grew up in Bonn and moved to Vienna in 1792. Within a few years he was admired as a brilliant pianist and a daring composer. Then, in his late twenties, he began to hear a ringing in his ears, and sounds grew harder to make out.",
+      },
+      {
+        title: "A letter he never sent",
+        body: "In October 1802, in a village called Heiligenstadt outside Vienna, he wrote a long letter to his brothers. He admitted how much he had hidden his deafness out of shame, that he had thought of ending his life, and that it was his art that held him back: he felt he could not leave the world until he had brought out what was in him. The letter was found after his death.",
+      },
+      {
+        title: "Writing in silence",
+        body: "He did not stop. In his last years he could not hear conversation at all, and friends wrote what they wanted to say in 'conversation books', which still survive. His late piano sonatas and quartets, and the Ninth Symphony of 1824, were composed almost entirely in his head.",
+      },
+      {
+        title: "A tune to take away",
+        body: "This famous piano piece, 'Für Elise', was not published in his lifetime. It was found and printed in 1867, forty years after he died. Listen to how a tiny, simple idea can say a lot.",
+        widget: <Listen items={[{ label: "Für Elise", sub: "the opening", play: () => playSequence([76, 75, 76, 75, 76, 71, 74, 72, 69], 0.3, { dur: 0.45 }) }]} />,
+      },
+    ],
+    quiz: [
+      { q: "What did Beethoven write in 1802 at Heiligenstadt?", options: ["A letter about his deafness", "A symphony", "A piano method", "A will for his piano"], answer: "A letter about his deafness" },
+      { q: "How did friends talk with him when he could no longer hear?", options: ["They wrote in conversation books", "They played notes", "They sang", "They used signs only"], answer: "They wrote in conversation books" },
+      { q: "When was 'Für Elise' first published?", options: ["After Beethoven died", "In 1802", "At its premiere", "Before he went deaf"], answer: "After Beethoven died" },
+    ],
+  },
+  {
+    slug: "clara-and-robert",
+    title: "Clara and Robert",
+    blurb: "A child prodigy, a stubborn father and a love story that ended up in court.",
+    group: "Stories",
+    steps: [
+      {
+        title: "A prodigy",
+        body: "Clara Wieck was born in Leipzig in 1819. Her father, Friedrich, a famous piano teacher, trained her from early childhood, and by her teens she was a celebrated pianist, touring Europe. She was among the first to play in public from memory.",
+      },
+      {
+        title: "A lodger and a duet",
+        body: "A young law student named Robert Schumann came to lodge in the Wiecks' house to study piano with her father. He was nine years older than Clara. As she grew up, the friendship became love.",
+      },
+      {
+        title: "'No'",
+        body: "Her father forbade the marriage and did everything he could to stop it. The couple took him to court, and the court ruled that they could marry. The wedding took place on 12 September 1840, the day before Clara's twenty-first birthday.",
+      },
+      {
+        title: "Music from the marriage",
+        body: "Robert wrote his 'year of song' in 1840, more than a hundred songs, many of them for Clara. They had eight children. When Robert died in 1856 Clara, then thirty-six, went back on the road to support the family and kept his music alive for the rest of her life.",
+        widget: <Listen items={[{ label: "A tune to dream on", sub: "a simple rising phrase", play: () => playSequence([65, 69, 72, 71, 69, 67, 65], 0.5, { dur: 0.8 }) }]} />,
+      },
+    ],
+    quiz: [
+      { q: "What did Clara's father do when they wanted to marry?", options: ["Tried to stop it, so they went to court", "Gave a big party", "Moved to another country", "Offered Robert a job"], answer: "Tried to stop it, so they went to court" },
+      { q: "What was unusual about Clara's public playing?", options: ["She often played from memory", "She played in the dark", "She only played her own music", "She never played Bach"], answer: "She often played from memory" },
+      { q: "What did Clara do after Robert's death?", options: ["Toured and taught to support the family", "Stopped playing", "Became a conductor", "Moved to Italy"], answer: "Toured and taught to support the family" },
+    ],
+  },
+  {
+    slug: "joplin-slow-down",
+    title: "Joplin says: slow down",
+    blurb: "The ragtime king who wrote 'never play ragtime fast'.",
+    group: "Stories",
+    steps: [
+      {
+        title: "A small town, a big hit",
+        body: "Scott Joplin lived in Sedalia, Missouri, where he played in clubs and taught young pianists. In 1899 a local publisher printed his 'Maple Leaf Rag', named for a Sedalia club. It sold in great numbers, and Joplin became the best-known name in ragtime.",
+      },
+      {
+        title: "The rule on the page",
+        body: "Ragtime sounds quick and jaunty, but Joplin wrote a firm instruction on his scores: ragtime should never be played fast. The charm of the music is in the steady left-hand beat against the syncopated right hand, and if you hurry, it falls apart.",
+        widget: <TempoDemo />,
+      },
+      {
+        title: "A different dream",
+        body: "Joplin hoped ragtime could be serious art. He wrote an opera, Treemonisha, which he struggled to get staged, and he died in 1917, long before it was properly performed. Interest in his music revived after the film The Sting (1973) used it, and in 1976 he was awarded a special Pulitzer Prize.",
+      },
+    ],
+    quiz: [
+      { q: "What did Joplin write about playing speed?", options: ["Ragtime should never be played fast", "Play as fast as you can", "Always speed up at the end", "Speed doesn't matter"], answer: "Ragtime should never be played fast" },
+      { q: "Which famous piece of his was published in 1899?", options: ["Maple Leaf Rag", "The Entertainer", "Treemonisha", "The Sting"], answer: "Maple Leaf Rag" },
+      { q: "What did Joplin write as a serious ambition?", options: ["An opera", "A symphony", "A ballet", "A hymn book"], answer: "An opera" },
+    ],
+  },
+  {
+    slug: "florence-price-found",
+    title: "The music in the abandoned house",
+    blurb: "How Florence Price's lost manuscripts were found, and why it matters.",
+    group: "Stories",
+    steps: [
+      {
+        title: "A symphony in Chicago",
+        body: "Florence Price was born in Little Rock, Arkansas, in 1887, and studied at the New England Conservatory in Boston. In 1927 she moved to Chicago. In 1933 the Chicago Symphony Orchestra played her Symphony in E minor, the first symphony by a Black woman to be performed by a major American orchestra.",
+      },
+      {
+        title: "Forgotten",
+        body: "Price wrote symphonies, concertos, songs, organ and piano music. But after she died in 1953, much of it dropped out of sight. For decades many of her pieces were not played or even in print.",
+      },
+      {
+        title: "A house, a discovery",
+        body: "In 2009 a couple renovating an abandoned house outside Chicago found boxes of papers in it. They were Florence Price's manuscripts, among them two violin concertos and a symphony. Orchestras and pianists around the world have since been playing and recording her music.",
+      },
+      {
+        title: "Try her music",
+        body: "Some of her piano pieces, such as 'The Goblin and the Mosquito' and 'Daisies: Waltz', appear on exam lists. The stories behind a piece can change how you play it.",
+        widget: (
+          <div className="row" style={{ justifyContent: "center" }}>
+            <Link className="btn solid" href="/learn/composers/price"><span>Meet Florence Price</span></Link>
+          </div>
+        ),
+      },
+    ],
+    quiz: [
+      { q: "Where were Florence Price's manuscripts found in 2009?", options: ["In an abandoned house", "In a library", "At a concert hall", "In a museum"], answer: "In an abandoned house" },
+      { q: "What was special about her 1933 performance?", options: ["A major US orchestra played a symphony by a Black woman for the first time", "It was her first concert", "It was her last symphony", "It was broadcast across Europe"], answer: "A major US orchestra played a symphony by a Black woman for the first time" },
+      { q: "Where did she move in 1927?", options: ["Chicago", "Boston", "New York", "Paris"], answer: "Chicago" },
     ],
   },
 ];

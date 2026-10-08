@@ -7,6 +7,7 @@ import Keyboard from "./Keyboard";
 import SourcePicker from "./SourcePicker";
 import { PASS_ACCURACY } from "@/lib/curriculum";
 import { midiName, poolFor, type Alter, type Section, type Target } from "@/lib/notes";
+import { encourage } from "@/lib/encourage";
 import { progressStore, recordRound, settingsStore, useSettings, weightFor, type Attempt } from "@/lib/progress";
 import { useListener } from "@/lib/useListener";
 
@@ -165,6 +166,7 @@ export default function Drill(props: Props) {
           on the first try
           {unitId && (summary.passed ? " · unit complete" : ` · ${Math.round(PASS_ACCURACY * 100)}% completes this unit`)}
         </p>
+        <p className="cheer">{encourage(summary.hits, summary.total, summary.total + summary.hits)}</p>
         <div className="row" style={{ justifyContent: "center", gap: 22 }}>
           <button className="btn solid" onClick={begin}><span>Again</span></button>
           {summary.passed && nextHref && <Link className="btn" href={nextHref}><span>Next unit</span></Link>}

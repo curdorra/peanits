@@ -62,6 +62,14 @@ export function streakOf(days: string[]): number {
   return n;
 }
 
+/** Whole days since the last practice day; 0 when there is none yet or you practised today. */
+export function daysSinceLast(days: string[]): number {
+  if (!days.length) return 0;
+  const last = new Date(`${days[days.length - 1]}T00:00:00`);
+  const today = new Date(`${dayKey()}T00:00:00`);
+  return Math.max(0, Math.round((today.getTime() - last.getTime()) / 86400000));
+}
+
 export function lastSevenDays(days: string[]): boolean[] {
   const set = new Set(days);
   const out: boolean[] = [];

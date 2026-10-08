@@ -1,5 +1,6 @@
 "use client";
 
+import { encourage } from "@/lib/encourage";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Keyboard from "./Keyboard";
@@ -171,6 +172,7 @@ export default function SightReader({ spec, title, detail, backHref, backLabel, 
       <div className="drill">
         <h1 className="display num">{right} of {marks.length}</h1>
         <p className="muted">notes right first time · {melody.key.name} · {melody.time}</p>
+        <p className="cheer">{encourage(right, marks.length, marks.length + right)}</p>
         <div className="stage wide"><Score melody={melody} marks={marks} /></div>
         <div className="row" style={{ justifyContent: "center", gap: 22 }}>
           <button className="btn solid" onClick={begin}><span>Another melody</span></button>

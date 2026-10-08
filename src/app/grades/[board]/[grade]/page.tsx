@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { BOARDS, findGrade, imslp, type BoardId } from "@/content/boards";
+import { noteFor } from "@/content/stories";
 
 export function generateStaticParams() {
   return Object.values(BOARDS).flatMap((b) => b.grades.map((g) => ({ board: b.id, grade: g.id })));
@@ -51,6 +52,7 @@ export default async function GradePage({ params }: PageProps<"/grades/[board]/[
                   <span>
                     {p.title}
                     <span className="who">{p.composer}{p.list ? ` · List ${p.list}` : ""}</span>
+                    {noteFor(p.title) && <span className="note">{noteFor(p.title)!.note}</span>}
                   </span>
                   <a href={imslp(p.composer, p.title)} target="_blank" rel="noopener noreferrer" aria-label={`Find a free score of ${p.title} on IMSLP`}>
                     Free score ↗
