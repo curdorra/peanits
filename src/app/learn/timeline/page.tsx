@@ -12,7 +12,7 @@ export default function Timeline() {
   return (
     <main className="wrap page">
       <div className="stack">
-        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Learn</Link><span>/</span></nav>
+        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Library</Link><span>/</span></nav>
         <h1 className="display">Timeline</h1>
         <div className="row" role="group" aria-label="Era" style={{ gap: 22 }}>
           {ERAS.map((e) => (

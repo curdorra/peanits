@@ -13,7 +13,7 @@ export default function Lessons() {
   return (
     <main className="wrap page">
       <div className="stack">
-        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Learn</Link><span>/</span></nav>
+        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Library</Link><span>/</span></nav>
         <h1 className="display">Lessons</h1>
         <p className="muted">Short and hands-on: tap, listen, then check yourself. {done > 0 && <span className="num">{done} of {LESSONS.length} complete.</span>}</p>
       </div>

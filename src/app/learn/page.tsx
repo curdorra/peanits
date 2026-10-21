@@ -4,13 +4,13 @@ import { LESSONS } from "@/content/lessons";
 import { COMPOSERS } from "@/content/composers";
 import { GLOSSARY } from "@/content/glossary";
 
-export const metadata: Metadata = { title: "Learn" };
+export const metadata: Metadata = { title: "Library" };
 
 export default function Learn() {
   return (
     <main className="wrap page">
-      <h1 className="display">Learn</h1>
-      <nav className="choices" aria-label="Learn">
+      <h1 className="display">Library</h1>
+      <nav className="choices" aria-label="Library">
         <Choice href="/learn/lessons" title="Lessons" text={`${LESSONS.length} short, hands-on lessons: tap, listen, then check yourself.`} />
         <Choice href="/learn/mood" title="Play it for the mood" text="Tell us how you feel. We'll suggest pieces that fit, with the story behind each." />
         <Choice href="/learn/composers" title="Composers" text={`${COMPOSERS.length} composers from Purcell to Florence Price, and what to play first.`} />

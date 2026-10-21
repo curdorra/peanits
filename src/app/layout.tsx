@@ -1,9 +1,10 @@
 import Link from "next/link";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { EB_Garamond, Noto_Music } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import ThemeToggle from "@/components/ThemeToggle";
+import RegisterSW from "@/components/RegisterSW";
 
 const garamond = EB_Garamond({
   variable: "--font-garamond",
@@ -19,6 +20,15 @@ export const metadata: Metadata = {
   title: { default: "peanits · free sight-reading for pianists", template: "%s · peanits" },
   description:
     "Free sight-reading practice for pianists. Play the note you see; peanits listens through your microphone or MIDI keyboard. Graded lessons, guides and history.",
+  icons: { icon: "/icon-192.png", apple: "/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "peanits", statusBarStyle: "default" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#eaddcb" },
+    { media: "(prefers-color-scheme: dark)", color: "#211c18" },
+  ],
 };
 
 // Runs before first paint so there is no flash of the wrong theme.
@@ -31,6 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <RegisterSW />
         <SiteHeader />
         {children}
         <footer className="site-foot">

@@ -20,7 +20,7 @@ export default function LessonPlayer({ slug }: { slug: string }) {
     <article className="stack" style={{ gap: 28 }}>
       <div className="stack">
         <nav className="crumbs" aria-label="Breadcrumb">
-          <Link href="/learn">Learn</Link><span>/</span><Link href="/learn/lessons">Lessons</Link><span>/</span>
+          <Link href="/learn">Library</Link><span>/</span><Link href="/learn/lessons">Lessons</Link><span>/</span>
         </nav>
         <h1 className="display">{lesson.title}</h1>
         <div className="steps" aria-label={`Step ${i + 1} of ${total}`}>

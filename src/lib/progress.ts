@@ -14,10 +14,16 @@ export type Progress = {
 };
 
 export type Source = "mic" | "midi" | "screen";
-export type Settings = { source: Source; length: number };
+export type Settings = {
+  source: Source;
+  length: number;
+  micSensitivity: number; // 0..1
+  board: "abrsm" | "trinity" | null; // the exam board and grade you're working towards; null until chosen
+  grade: string | null; // "initial" | "1" … "8"
+};
 
 export const progressStore = createStore<Progress>("peanits-progress-v1", { notes: {}, units: {}, days: [], rounds: 0, lessons: {} });
-export const settingsStore = createStore<Settings>("peanits-settings-v1", { source: "mic", length: 20 });
+export const settingsStore = createStore<Settings>("peanits-settings-v1", { source: "mic", length: 20, micSensitivity: 0.6, board: null, grade: null });
 
 export const useProgress = progressStore.use;
 export const useSettings = settingsStore.use;

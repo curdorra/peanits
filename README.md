@@ -4,6 +4,11 @@ Free sight-reading practice for pianists, by Yirschen. Play the note shown; pean
 microphone or a MIDI keyboard. Graded units, guides, and history. No account, no paywall; progress stays in
 your browser.
 
+## Structure
+
+Today (`/`, starts `/session`) · Practise (`/practice`) · My grade (`/grades/…`, the grade saved in Settings) · Library (`/learn`) · Settings.
+"Grade" always means an exam grade; the note-reading course is in Parts I–III.
+
 ## Develop
 
 ```bash
@@ -17,3 +22,6 @@ npm run build
 - `src/content/lessons.tsx`, `composers.ts`, `glossary.ts`, `articles.ts` — Learn content (check facts before publishing changes)
 - `design/style-board-v3.html` — the visual reference (cream paper, one ink, pencil illustrations)
 - `scripts/gen-art.ts` — regenerates the metronome drawing (`node scripts/gen-art.ts`)
+- `scripts/gen-icons.mjs` — regenerates the app icons in `public/` (`node scripts/gen-icons.mjs`)
+- `src/app/manifest.ts`, `public/sw.js` — installable app and offline cache (the service worker only registers in production builds)
+- `scripts/resolve-scores.ts` — looks up each piece's IMSLP page into `src/content/scores.json` (`node scripts/resolve-scores.ts`); rerun after adding pieces

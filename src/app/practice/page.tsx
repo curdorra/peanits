@@ -3,20 +3,26 @@
 import Choice from "@/components/Choice";
 import { ROMAN, UNITS } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
+import { useMyGrade } from "@/lib/myGrade";
 
 export default function Practice() {
   const p = useProgress();
   const next = UNITS.find((u) => !p.units[u.id]?.passed);
+  const mine = useMyGrade();
 
   const groups = [
     {
       title: "Read",
       rows: [
-        { href: "/practice/sight-reading", title: "Sight-reading", text: "New melodies at your exam grade. Look, then play." },
+        {
+          href: mine?.sightReadingHref ?? "/practice/sight-reading",
+          title: "Sight-reading",
+          text: mine ? `New melodies at ${mine.label}. Look, then play.` : "New melodies at your exam grade. Look, then play.",
+        },
         {
           href: "/practice/notes",
           title: "Note reading",
-          text: next ? `Single notes, stage by stage. Next: ${next.title} (Stage ${ROMAN[next.grade]}).` : "Single notes, stage by stage. All complete.",
+          text: next ? `Single notes, part by part. Next: ${next.title} (Part ${ROMAN[next.grade]}).` : "Single notes, part by part. All complete.",
         },
         { href: "/practice/keys", title: "Key signatures", text: "Name the key from its sharps or flats." },
         { href: "/practice/intervals", title: "Intervals", text: "Name the distance between two notes, by eye or by ear." },

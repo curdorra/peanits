@@ -513,5 +513,3 @@ export const findGrade = (b: BoardId, g: string) => BOARDS[b]?.grades.find((x) =
 /** Sight-reading level for practice. Trinity tests sit about two grades lower. */
 export const practiceLevel = (b: BoardId, level: number) => (b === "trinity" ? Math.max(0, level - 2) : level);
 
-export const imslp = (composer: string, title: string) =>
-  `https://imslp.org/index.php?title=Special:Search&search=${encodeURIComponent(`${composer.split(" ").pop()} ${title.replace(/\(.*?\)/g, "")}`)}`;

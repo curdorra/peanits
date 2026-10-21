@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { startMic, type PitchFrame, type MicSession } from "./pitch";
 import { startMidi, type MidiSession } from "./midi";
+import { settingsStore } from "./progress";
 
 export type Heard = { midi: number; cents: number; hz: number } | null;
 
@@ -23,6 +24,7 @@ export function useListener(onNote: (midi: number) => void) {
   const cb = useRef(onNote);
   const stable = useRef({ midi: -1, count: 0 });
   const last = useRef<Heard>(null);
+  const level = useRef(0); // mic input level 0..1, read by meters without re-rendering
 
   useEffect(() => {
     cb.current = onNote;
@@ -32,6 +34,7 @@ export function useListener(onNote: (midi: number) => void) {
     session.current?.stop();
     session.current = null;
     last.current = null;
+    level.current = 0;
     setActive(false);
     setHeard(null);
   }, []);
@@ -43,7 +46,8 @@ export function useListener(onNote: (midi: number) => void) {
       if (source === "screen") return true; // on-screen keys call the handler directly
       try {
         if (source === "mic") {
-          session.current = await startMic((f: PitchFrame | null) => {
+          session.current = await startMic((f: PitchFrame | null, lvl: number) => {
+            level.current = lvl;
             const prev = last.current;
             const changed =
               (f === null) !== (prev === null) || (f && prev && (f.midi !== prev.midi || Math.abs(f.cents - prev.cents) >= 6));
@@ -63,7 +67,7 @@ export function useListener(onNote: (midi: number) => void) {
               s.count = 1;
             }
             if (s.count === STABLE_FRAMES) cb.current(f.midi);
-          });
+          }, settingsStore.get().micSensitivity);
           setDevices([]);
         } else {
           const m = await startMidi((midi) => {
@@ -90,5 +94,5 @@ export function useListener(onNote: (midi: number) => void) {
 
   useEffect(() => () => session.current?.stop(), []);
 
-  return { start, stop, active, error, heard, devices };
+  return { start, stop, active, error, heard, devices, level };
 }

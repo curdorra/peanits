@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { COMPOSERS, composerBySlug, lifespan } from "@/content/composers";
-import { boardList, imslp } from "@/content/boards";
+import { boardList } from "@/content/boards";
+import ScoreLink from "@/components/ScoreLink";
 import { STORIES, noteFor } from "@/content/stories";
 
 export function generateStaticParams() {
@@ -31,7 +32,7 @@ export default async function ComposerPage({ params }: PageProps<"/learn/compose
     <main className="wrap page">
       <article className="stack" style={{ gap: 30 }}>
         <div className="stack">
-          <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Learn</Link><span>/</span><Link href="/learn/composers">Composers</Link><span>/</span></nav>
+          <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Library</Link><span>/</span><Link href="/learn/composers">Composers</Link><span>/</span></nav>
           <h1 className="display">{c.name}</h1>
           <p className="muted num">{lifespan(c)} · {c.from} · {c.era}</p>
         </div>
@@ -52,7 +53,7 @@ export default async function ComposerPage({ params }: PageProps<"/learn/compose
                 {c.start.map((s) => (
                   <li key={s.title}>
                     <span>{s.title}<span className="who">{s.level}</span></span>
-                    <a href={imslp(c.name, s.title)} target="_blank" rel="noopener noreferrer">Free score ↗</a>
+                    <ScoreLink composer={c.name} title={s.title} />
                   </li>
                 ))}
               </ul>

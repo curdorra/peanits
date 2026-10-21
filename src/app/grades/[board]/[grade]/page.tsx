@@ -2,7 +2,9 @@ import Independent from "@/components/Independent";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { BOARDS, findGrade, imslp, type BoardId } from "@/content/boards";
+import { BOARDS, findGrade, type BoardId } from "@/content/boards";
+import ScoreLink from "@/components/ScoreLink";
+import MakeMyGrade from "@/components/MakeMyGrade";
 import { noteFor } from "@/content/stories";
 
 export function generateStaticParams() {
@@ -34,7 +36,7 @@ export default async function GradePage({ params }: PageProps<"/grades/[board]/[
         <p className="muted" style={{ maxWidth: "52ch" }}>{g.about}</p>
         <div className="row" style={{ gap: 22, marginTop: 8 }}>
           <Link className="btn solid" href={`/practice/sight-reading/${b.id}/${g.id}`}><span>Practise sight-reading</span></Link>
-          <Link className="tbtn" href="/practice">Other practice</Link>
+          <MakeMyGrade board={b.id} grade={g.id} />
         </div>
       </div>
 
@@ -54,9 +56,7 @@ export default async function GradePage({ params }: PageProps<"/grades/[board]/[
                     <span className="who">{p.composer}{p.list ? ` · List ${p.list}` : ""}</span>
                     {noteFor(p.title) && <span className="note">{noteFor(p.title)!.note}</span>}
                   </span>
-                  <a href={imslp(p.composer, p.title)} target="_blank" rel="noopener noreferrer" aria-label={`Find a free score of ${p.title} on IMSLP`}>
-                    Free score ↗
-                  </a>
+                  <ScoreLink composer={p.composer} title={p.title} />
                 </li>
               ))}
             </ul>

@@ -9,7 +9,7 @@ export default function Composers() {
   return (
     <main className="wrap page">
       <div className="stack">
-        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Learn</Link><span>/</span></nav>
+        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Library</Link><span>/</span></nav>
         <h1 className="display">Composers</h1>
       </div>
       {ERAS.map((e) => (

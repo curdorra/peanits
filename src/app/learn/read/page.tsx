@@ -8,7 +8,7 @@ export default function Learn() {
   return (
     <main className="wrap page">
       <div className="stack">
-        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Learn</Link><span>/</span></nav>
+        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Library</Link><span>/</span></nav>
         <h1 className="display">Reading room</h1>
       </div>
       <nav className="choices" aria-label="Guides">

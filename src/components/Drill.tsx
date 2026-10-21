@@ -22,6 +22,8 @@ type Props = {
   backLabel: string;
   nextHref?: string; // shown after a passed unit
   compact?: boolean; // hide the heading and description (when the page already shows them)
+  onNext?: () => void; // inside a session: the next step, offered when the round ends
+  nextLabel?: string;
 };
 
 type Phase = "ready" | "playing" | "done";
@@ -51,7 +53,7 @@ const median = (xs: number[]) => {
 };
 
 export default function Drill(props: Props) {
-  const { title, detail, sections, alters, length, unitId, backHref, backLabel, nextHref, compact } = props;
+  const { title, detail, sections, alters, length, unitId, backHref, backLabel, nextHref, compact, onNext, nextLabel } = props;
   const settings = useSettings();
 
   const [phase, setPhase] = useState<Phase>("ready");
@@ -168,8 +170,9 @@ export default function Drill(props: Props) {
         </p>
         <p className="cheer">{encourage(summary.hits, summary.total, summary.total + summary.hits)}</p>
         <div className="row" style={{ justifyContent: "center", gap: 22 }}>
-          <button className="btn solid" onClick={begin}><span>Again</span></button>
-          {summary.passed && nextHref && <Link className="btn" href={nextHref}><span>Next unit</span></Link>}
+          {onNext && <button className="btn solid" onClick={onNext}><span>{nextLabel ?? "Continue"}</span></button>}
+          <button className={onNext ? "btn" : "btn solid"} onClick={begin}><span>Again</span></button>
+          {!onNext && summary.passed && nextHref && <Link className="btn" href={nextHref}><span>Next unit</span></Link>}
           <Link className="tbtn" href={backHref}>{backLabel}</Link>
         </div>
       </div>

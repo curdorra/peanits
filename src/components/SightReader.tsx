@@ -23,6 +23,8 @@ type Props = {
   backHref: string;
   backLabel: string;
   clef?: Clef;
+  onNext?: () => void; // inside a session: the next step, offered when the melody ends
+  nextLabel?: string;
 };
 
 export function describeSpec(spec: SRSpec, keyNames: (id: string) => string) {
@@ -33,7 +35,7 @@ export function describeSpec(spec: SRSpec, keyNames: (id: string) => string) {
   };
 }
 
-export default function SightReader({ spec, title, detail, backHref, backLabel, clef }: Props) {
+export default function SightReader({ spec, title, detail, backHref, backLabel, clef, onNext, nextLabel }: Props) {
   const { source } = useSettings();
   const [phase, setPhase] = useState<Phase>("ready");
   const [melody, setMelody] = useState<Melody | null>(null);
@@ -175,7 +177,8 @@ export default function SightReader({ spec, title, detail, backHref, backLabel, 
         <p className="cheer">{encourage(right, marks.length, marks.length + right)}</p>
         <div className="stage wide"><Score melody={melody} marks={marks} /></div>
         <div className="row" style={{ justifyContent: "center", gap: 22 }}>
-          <button className="btn solid" onClick={begin}><span>Another melody</span></button>
+          {onNext && <button className="btn solid" onClick={onNext}><span>{nextLabel ?? "Continue"}</span></button>}
+          <button className={onNext ? "btn" : "btn solid"} onClick={begin}><span>Another melody</span></button>
           <button className="btn" onClick={hear}><span>Hear it</span></button>
           <Link className="tbtn" href={backHref}>{backLabel}</Link>
         </div>

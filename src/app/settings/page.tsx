@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import GradePicker from "@/components/GradePicker";
 import InputTest from "@/components/InputTest";
+import InstallApp from "@/components/InstallApp";
 import SourcePicker from "@/components/SourcePicker";
 import { progressStore, useSettings } from "@/lib/progress";
 
@@ -13,10 +15,20 @@ export default function Settings() {
     <main className="wrap page">
       <h1 className="display">Settings</h1>
 
+      <section id="grade" className="stack" style={{ gap: 18 }}>
+        <h2 className="title">Your grade</h2>
+        <GradePicker inSettings />
+      </section>
+
       <section className="stack" style={{ gap: 18, alignItems: "flex-start" }}>
         <h2 className="title">Listen with</h2>
         <SourcePicker />
         {s.source !== "screen" && <InputTest />}
+      </section>
+
+      <section id="app" className="stack" style={{ gap: 14 }}>
+        <h2 className="title">Get the app</h2>
+        <InstallApp />
       </section>
 
       <section className="stack" style={{ gap: 14 }}>

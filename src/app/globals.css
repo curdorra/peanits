@@ -153,6 +153,9 @@ p { margin: 0; }
 .readout { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
 .readout div { min-width: 90px; }
 .readout b { display: block; font-weight: 400; font-size: 1.9rem; font-feature-settings: "lnum", "tnum"; }
+input[type="range"] { accent-color: var(--ink); }
+.meter { height: 6px; max-width: 360px; border: 1px solid var(--ink); border-radius: 3px; overflow: hidden; }
+.meter div { height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 60ms linear; }
 .alert { border: 1px dashed var(--ink); border-radius: 14px; padding: 12px 18px; font-size: 0.95rem; max-width: 56ch; }
 
 /* ---- article ---- */
@@ -227,6 +230,7 @@ p { margin: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .chip { font: inherit; font-size: 0.95rem; border: 1px solid var(--ink); border-radius: 999px; padding: 6px 16px; text-decoration: none; background: none; color: var(--ink); cursor: pointer; }
 .chip:hover { background: var(--ink); color: var(--paper); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .crumbs { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.9rem; color: var(--ink2); }
 .crumbs a { color: var(--ink2); text-underline-offset: 3px; }
 .chip[disabled] { cursor: default; }

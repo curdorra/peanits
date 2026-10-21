@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { boardList, imslp } from "@/content/boards";
+import { boardList } from "@/content/boards";
+import ScoreLink from "@/components/ScoreLink";
 import { COMPOSERS } from "@/content/composers";
 import { MOODS, PIECE_NOTES, type Mood } from "@/content/stories";
 
@@ -30,7 +31,7 @@ export default function MoodPage() {
   return (
     <main className="wrap page">
       <div className="stack">
-        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Learn</Link><span>/</span></nav>
+        <nav className="crumbs" aria-label="Breadcrumb"><Link href="/learn">Library</Link><span>/</span></nav>
         <h1 className="display">How do you feel?</h1>
         <p className="muted">Choose a mood. We’ll suggest pieces from the exam lists, with a line on the story behind each.</p>
       </div>
@@ -59,7 +60,7 @@ export default function MoodPage() {
                   </span>
                   <span className="note">{f.note}</span>
                 </span>
-                <a href={imslp(f.composer, f.title)} target="_blank" rel="noopener noreferrer">Free score ↗</a>
+                <ScoreLink composer={f.composer} title={f.title} />
               </li>
             );
           })}

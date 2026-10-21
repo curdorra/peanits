@@ -30,8 +30,8 @@ export default function PathPage() {
         const offset = UNITS.findIndex((u) => u.grade === g);
         return (
           <section key={g} className="stack" style={{ gap: 18 }} aria-labelledby={`g${g}`}>
-            <h2 id={`g${g}`} className="title">Stage {ROMAN[g]}</h2>
-            <PathSystem units={units} passed={passed} offset={offset} label={`Stage ${ROMAN[g]}`} />
+            <h2 id={`g${g}`} className="title">Part {ROMAN[g]}</h2>
+            <PathSystem units={units} passed={passed} offset={offset} label={`Part ${ROMAN[g]}`} />
             <div>
               {units.map((u, i) => {
                 const s = p.units[u.id];
